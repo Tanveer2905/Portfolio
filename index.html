@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanveer Ahmad | Backend Developer | System v1.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --phosphor-main: #33ff33;
+            --phosphor-dim: #22aa22;
+            --bg-color: #050505;
+            --crt-flicker: 0.02;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--phosphor-main);
+            font-family: 'VT323', monospace;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+        }
+
+        /* --- CRT Effects --- */
+        #crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: flicker 0.15s infinite;
+        }
+
+        #scanline {
+            width: 100%;
+            height: 10px;
+            background: rgba(51, 255, 51, 0.1);
+            position: absolute;
+            z-index: 9998;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            animation: scanline 6s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.95; }
+            5% { opacity: 0.85; }
+            10% { opacity: 0.95; }
+            100% { opacity: 0.9; }
+        }
+
+        /* --- UI Elements --- */
+        .desktop-icon {
+            cursor: pointer;
+            transition: all 0.2s;
+            text-shadow: 0 0 5px var(--phosphor-main);
+        }
+        .desktop-icon:hover {
+            background-color: rgba(51, 255, 51, 0.2);
+            border: 1px dashed var(--phosphor-main);
+        }
+
+        .window {
+            position: absolute;
+            background-color: #000;
+            border: 2px solid var(--phosphor-main);
+            box-shadow: 0 0 15px rgba(51, 255, 51, 0.3);
+            display: flex;
+            flex-direction: column;
+            min-width: 300px;
+            max-width: 90vw;
+            max-height: 80vh;
+            opacity: 0; 
+            transform: scale(0.95);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .window.open {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .title-bar {
+            background-color: var(--phosphor-main);
+            color: #000;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: grab;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .title-bar:active {
+            cursor: grabbing;
+        }
+
+        .window-content {
+            padding: 16px;
+            overflow-y: auto;
+            color: var(--phosphor-main);
+        }
+
+        .window-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .window-content::-webkit-scrollbar-track {
+            background: #000; 
+        }
+        .window-content::-webkit-scrollbar-thumb {
+            background: var(--phosphor-dim); 
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0 5px;
+        }
+        .close-btn:hover {
+            background-color: #000;
+            color: var(--phosphor-main);
+        }
+
+        /* --- Boot Screen --- */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 10000;
+            padding: 40px;
+            font-size: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .blink {
+            animation: blinker 1s linear infinite;
+        }
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
+
+        /* --- Canvas Background --- */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Start Menu */
+        #taskbar {
+            border-top: 2px solid var(--phosphor-main);
+            background: #000;
+        }
+        
+        .start-menu-item:hover {
+            background-color: var(--phosphor-main);
+            color: black;
+        }
+
+        /* Glitch Text Effect */
+        .glitch-hover:hover {
+            animation: glitch-anim 0.3s infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        .project-card {
+            border: 1px solid var(--phosphor-dim);
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .project-card:hover {
+            box-shadow: 0 0 10px var(--phosphor-dim);
+        }
+
+        /* Utilities */
+        .text-phosphor { color: var(--phosphor-main); }
+        .bg-phosphor { background-color: var(--phosphor-main); }
+        .border-phosphor { border-color: var(--phosphor-main); }
+    </style>
+</head>
+<body class="text-xl">
+
+    <!-- CRT Overlay Effects -->
+    <div id="crt-overlay"></div>
+    <div id="scanline"></div>
+
+    <!-- Boot Screen -->
+    <div id="boot-screen">
+        <div id="boot-text"></div>
+    </div>
+
+    <!-- Matrix Background -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Desktop Environment -->
+    <!-- UPDATED: Added flex-wrap, content-start, and reduced gap to gap-6 to fit icons on screen -->
+    <div id="desktop" class="relative w-full h-full p-8 hidden flex flex-col flex-wrap content-start items-start gap-6 z-10">
+        
+        <!-- Desktop Icons -->
+        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('about')" onclick="handleIconClick('about')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span class="text-center text-sm">SYSTEM_INFO</span>
+        </div>
+
+        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('skills')" onclick="handleIconClick('skills')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            <span class="text-center text-sm">TERMINAL.EXE</span>
+        </div>
+
+        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('projects')" onclick="handleIconClick('projects')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <span class="text-center text-sm">PROJECTS_DIR</span>
+        </div>
+
+        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('experience')" onclick="handleIconClick('experience')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <span class="text-center text-sm">CAREER.LOG</span>
+        </div>
+
+        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('contact')" onclick="handleIconClick('contact')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span class="text-center text-sm">MAIL_ME</span>
+        </div>
+
+        <!-- NEW: GitHub Icon (Executes link) -->
+        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" onclick="window.open('https://github.com/Tanveer2905', '_blank')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            </svg>
+            <span class="text-center text-sm">GITHUB.EXE</span>
+        </div>
+
+        <!-- NEW: LinkedIn Icon (Executes link) -->
+        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" onclick="window.open('https://linkedin.com/in/tanveer-ahmad-6a5468251', '_blank')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+            <span class="text-center text-sm">LINKEDIN.EXE</span>
+        </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div id="taskbar" class="fixed bottom-0 left-0 w-full h-12 flex items-center justify-between px-2 z-50 hidden">
+        <div class="flex items-center h-full">
+            <button id="start-btn" onclick="toggleStartMenu()" class="h-8 px-4 bg-phosphor text-black font-bold uppercase hover:bg-white transition-colors border-2 border-transparent hover:border-phosphor flex items-center gap-2">
+                <span class="text-xl">❖</span> START
+            </button>
+            <div id="active-tasks" class="flex ml-4 gap-2">
+                <!-- Active window tabs go here -->
+            </div>
+        </div>
+        <div class="text-lg px-4 border-l-2 border-phosphor h-8 flex items-center" id="clock">
+            00:00:00
+        </div>
+    </div>
+
+    <!-- Start Menu -->
+    <div id="start-menu" class="fixed bottom-12 left-2 w-64 bg-black border-2 border-phosphor hidden z-50 shadow-lg shadow-green-900/20">
+        <div class="bg-phosphor text-black p-2 font-bold text-center">SYSTEM MENU</div>
+        <ul class="py-2">
+            <li class="px-4 py-2 start-menu-item cursor-pointer" onclick="openWindow('about'); toggleStartMenu()">System Info</li>
+            <li class="px-4 py-2 start-menu-item cursor-pointer" onclick="openWindow('skills'); toggleStartMenu()">Run Diagnostics (Skills)</li>
+            <li class="px-4 py-2 start-menu-item cursor-pointer" onclick="openWindow('projects'); toggleStartMenu()">Browse Files (Projects)</li>
+            <li class="px-4 py-2 start-menu-item cursor-pointer" onclick="openWindow('contact'); toggleStartMenu()">Shut Down (Contact)</li>
+        </ul>
+    </div>
+
+    <!-- WINDOWS -->
+
+    <!-- About Window -->
+    <div id="window-about" class="window" style="top: 10%; left: 10%; z-index: 10;">
+        <div class="title-bar" onmousedown="startDrag(event, 'window-about')" ontouchstart="startDrag(event, 'window-about')">
+            <span>SYSTEM_INFO</span>
+            <span class="close-btn" onclick="closeWindow('about')">[X]</span>
+        </div>
+        <div class="window-content w-[400px] h-[300px]">
+            <div class="flex items-center gap-4 mb-4 border-b border-phosphor pb-4">
+                <div class="w-16 h-16 border border-phosphor flex items-center justify-center text-4xl bg-green-900/30">
+                    TA
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold">TANVEER AHMAD</h2>
+                    <p class="opacity-80">Backend Developer | Cloud Engineer</p>
+                </div>
+            </div>
+            <p class="mb-4 text-justify">
+                > INITIALIZING USER PROFILE...<br>
+                > Backend Developer skilled in Python, Django, and REST APIs.<br>
+                > Passionate about backend architecture, cybersecurity, and AI-powered systems.<br>
+                > Experienced in building scalable, secure, and cloud-ready applications.
+            </p>
+            <div class="mt-4">
+                <h3 class="font-bold border-b border-dashed border-phosphor mb-2">> EDUCATION</h3>
+                <p>B.Tech Computer Science Engineering</p>
+                <p class="text-sm opacity-80">Uttarakhand Technical University (2021-2025)</p>
+                <p class="text-sm opacity-80">CGPA: 7.8/10</p>
+            </div>
+            <div class="mt-4">
+                <h3 class="font-bold border-b border-dashed border-phosphor mb-2">> CERTIFICATIONS</h3>
+                <ul class="list-disc pl-5 text-sm">
+                    <li>Google Cybersecurity Certificate</li>
+                    <li>Google Cloud Skill Badges (Vertex AI, BigQuery)</li>
+                    <li>Google Cloud Cybersecurity Essentials</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Window -->
+    <div id="window-skills" class="window" style="top: 15%; left: 30%; z-index: 9;">
+        <div class="title-bar" onmousedown="startDrag(event, 'window-skills')" ontouchstart="startDrag(event, 'window-skills')">
+            <span>TERMINAL.EXE</span>
+            <span class="close-btn" onclick="closeWindow('skills')">[X]</span>
+        </div>
+        <div class="window-content w-[500px] h-[400px] font-mono">
+            <p class="mb-2">> run skill_diagnostic.py</p>
+            <p class="mb-4 text-green-700">Analyzing kernel capabilities...</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="text-white bg-green-900 px-1 mb-2">LANGUAGES</h3>
+                    <ul class="list-none">
+                        <li>[ok] Python</li>
+                        <li>[ok] Java</li>
+                        <li>[ok] JavaScript</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white bg-green-900 px-1 mb-2">FRAMEWORKS</h3>
+                    <ul class="list-none">
+                        <li>[ok] Django</li>
+                        <li>[ok] Flask</li>
+                        <li>[ok] FastAPI</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white bg-green-900 px-1 mb-2">DATABASE</h3>
+                    <ul class="list-none">
+                        <li>[ok] PostgreSQL</li>
+                        <li>[ok] MySQL</li>
+                        <li>[ok] MongoDB</li>
+                        <li>[ok] Redis (Caching)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white bg-green-900 px-1 mb-2">CLOUD/DEVOPS</h3>
+                    <ul class="list-none">
+                        <li>[ok] Google Cloud Platform</li>
+                        <li>[ok] Docker</li>
+                        <li>[ok] CI/CD Pipelines</li>
+                        <li>[ok] Serverless</li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-white bg-green-900 px-1 mb-2">CYBERSECURITY</h3>
+                    <p class="text-sm">> SIEM Tools (Splunk, Chronicle), Network Security, Vulnerability Scanning, Secure Authentication.</p>
+                </div>
+            </div>
+            <p class="mt-4 blink">_</p>
+        </div>
+    </div>
+
+    <!-- Projects Window -->
+    <div id="window-projects" class="window" style="top: 5%; left: 20%; z-index: 8;">
+        <div class="title-bar" onmousedown="startDrag(event, 'window-projects')" ontouchstart="startDrag(event, 'window-projects')">
+            <span>PROJECTS_DIR</span>
+            <span class="close-btn" onclick="closeWindow('projects')">[X]</span>
+        </div>
+        <div class="window-content w-[600px] h-[500px]">
+            <p class="mb-4">> listing directory /home/tanveer/projects...</p>
+
+            <!-- Project 1 -->
+            <div class="project-card">
+                <h3 class="text-xl font-bold mb-1">LOCAGO - Vehicle Tracking</h3>
+                <div class="flex gap-2 text-xs mb-2">
+                    <span class="bg-green-900 px-1">Flask</span>
+                    <span class="bg-green-900 px-1">PostgreSQL</span>
+                    <span class="bg-green-900 px-1">Twilio API</span>
+                </div>
+                <p class="text-sm opacity-90 mb-2">
+                    Collaborative project under District Magistrate of Tehri Garhwal.
+                    Built real-time GPS tracking for emergency vehicles (police, ambulance).
+                    Integrated Twilio for SMS alerts and geofencing.
+                </p>
+                <button class="text-xs border border-phosphor px-2 py-1 hover:bg-phosphor hover:text-black">EXECUTE</button>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card">
+                <h3 class="text-xl font-bold mb-1">Plant Disease Detection API</h3>
+                <div class="flex gap-2 text-xs mb-2">
+                    <span class="bg-green-900 px-1">FastAPI</span>
+                    <span class="bg-green-900 px-1">TensorFlow</span>
+                    <span class="bg-green-900 px-1">GCP</span>
+                </div>
+                <p class="text-sm opacity-90 mb-2">
+                    ML API using ensemble of 8 classification models.
+                    Deployed REST API on Google Cloud returning JSON results and mask overlays.
+                </p>
+                <button class="text-xs border border-phosphor px-2 py-1 hover:bg-phosphor hover:text-black">EXECUTE</button>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card">
+                <h3 class="text-xl font-bold mb-1">Trace Chain Carbon Tracker</h3>
+                <div class="flex gap-2 text-xs mb-2">
+                    <span class="bg-green-900 px-1">Flask</span>
+                    <span class="bg-green-900 px-1">Blockchain</span>
+                </div>
+                <p class="text-sm opacity-90 mb-2">
+                    Developed blockchain-secured APIs for carbon emission data tracking and alert automation.
+                </p>
+                <button class="text-xs border border-phosphor px-2 py-1 hover:bg-phosphor hover:text-black">EXECUTE</button>
+            </div>
+            
+             <p class="mt-4 text-xs opacity-70">Total files found: 3</p>
+        </div>
+    </div>
+
+    <!-- Experience Window -->
+    <div id="window-experience" class="window" style="top: 20%; left: 15%; z-index: 8;">
+        <div class="title-bar" onmousedown="startDrag(event, 'window-experience')" ontouchstart="startDrag(event, 'window-experience')">
+            <span>CAREER.LOG</span>
+            <span class="close-btn" onclick="closeWindow('experience')">[X]</span>
+        </div>
+        <div class="window-content w-[550px] h-[400px]">
+            <div class="border-l-2 border-dashed border-phosphor ml-2 pl-4 pb-8 relative">
+                <div class="absolute -left-1.5 top-0 w-3 h-3 bg-phosphor"></div>
+                <h3 class="text-lg font-bold">Backend & Business Analysis Intern</h3>
+                <h4 class="text-md opacity-80">ColoredCow | Dec 2024 - Present</h4>
+                <ul class="list-disc pl-5 text-sm mt-2 opacity-90">
+                    <li>Designed and documented backend APIs, reducing integration time by 20%.</li>
+                    <li>Contributed to scalable backend data models and performed system requirement analysis.</li>
+                </ul>
+            </div>
+
+            <div class="border-l-2 border-dashed border-phosphor ml-2 pl-4 pb-8 relative">
+                <div class="absolute -left-1.5 top-0 w-3 h-3 bg-phosphor"></div>
+                <h3 class="text-lg font-bold">Intern District Administration</h3>
+                <h4 class="text-md opacity-80">Tehri Garhwal | Jun 2024 - Aug 2024</h4>
+                <ul class="list-disc pl-5 text-sm mt-2 opacity-90">
+                    <li>Built Flask + PostgreSQL real-time vehicle tracking system.</li>
+                    <li>Integrated Twilio API for SMS alerts, improving emergency response by 30%.</li>
+                </ul>
+            </div>
+
+            <div class="border-l-2 border-dashed border-phosphor ml-2 pl-4 pb-8 relative">
+                <div class="absolute -left-1.5 top-0 w-3 h-3 bg-phosphor"></div>
+                <h3 class="text-lg font-bold">College Cybersecurity Team Lead</h3>
+                <h4 class="text-md opacity-80">2023 - 2024</h4>
+                <ul class="list-disc pl-5 text-sm mt-2 opacity-90">
+                    <li>Led vulnerability assessments and secure authentication implementation.</li>
+                    <li>Conducted database audits and trained peers on OWASP.</li>
+                </ul>
+            </div>
+
+            <div class="border-l-2 border-dashed border-phosphor ml-2 pl-4 pb-2 relative">
+                <div class="absolute -left-1.5 top-0 w-3 h-3 bg-phosphor"></div>
+                <h3 class="text-lg font-bold">DevRel Lead</h3>
+                <h4 class="text-md opacity-80">HackWithIndia | 2023</h4>
+                <ul class="list-disc pl-5 text-sm mt-2 opacity-90">
+                    <li>Organized backend-focused hackathons.</li>
+                    <li>Mentored teams in API deployment and CI/CD.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Window -->
+    <div id="window-contact" class="window" style="top: 25%; left: 40%; z-index: 11;">
+        <div class="title-bar" onmousedown="startDrag(event, 'window-contact')" ontouchstart="startDrag(event, 'window-contact')">
+            <span>MAIL_CLIENT</span>
+            <span class="close-btn" onclick="closeWindow('contact')">[X]</span>
+        </div>
+        <!-- UPDATED: Increased height to 340px for better button visibility -->
+        <div class="window-content w-[400px] h-[340px] flex flex-col justify-between">
+            <div>
+                <p class="mb-4">To: ahmadtanveer.2905@gmail.com</p>
+                <p class="mb-4">Subject: Connection Request</p>
+                <div class="border border-phosphor p-2 h-20 text-sm opacity-70">
+                    Click button to send mail...
+                </div>
+            </div>
+            
+            <div class="mt-4 flex flex-col gap-2">
+                <a href="mailto:ahmadtanveer.2905@gmail.com" class="text-center bg-phosphor text-black py-1 font-bold hover:bg-white">SEND MESSAGE</a>
+                <div class="flex gap-2 justify-center mt-2">
+                    <!-- UPDATED: Added links with target="_blank" -->
+                    <a href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" class="border border-phosphor px-2 py-1 text-sm hover:bg-phosphor hover:text-black">LINKEDIN</a>
+                    <a href="https://github.com/Tanveer2905" target="_blank" class="border border-phosphor px-2 py-1 text-sm hover:bg-phosphor hover:text-black">GITHUB</a>
+                    <!-- FIX: Changed from tel: link to copy-to-clipboard button to prevent crashes -->
+                    <button id="phone-btn" onclick="copyPhoneNumber()" class="border border-phosphor px-2 py-1 text-sm hover:bg-phosphor hover:text-black bg-transparent cursor-pointer font-inherit">+91 7017666204</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Boot Sequence Logic ---
+        const bootText = [
+            "BIOS DATE 01/01/24 14:22:00 VER 1.0.2",
+            "CPU: QUANTUM-CORE 4.5GHz",
+            "64GB RAM SYSTEM DETECTED",
+            "Detecting Primary Master ... LOCAGO_DRIVE_01",
+            "Detecting Primary Slave ... BACKEND_DB_02",
+            "",
+            "Loading Kernel ...",
+            "................................................",
+            "Initializing Video Adapter ..... OK",
+            "Initializing Python Environment ..... OK",
+            "Loading User Profile: TANVEER AHMAD ..... OK",
+            "Starting SYSTEM UI ...",
+        ];
+
+        const bootScreen = document.getElementById('boot-screen');
+        const bootContent = document.getElementById('boot-text');
+        const desktop = document.getElementById('desktop');
+        const taskbar = document.getElementById('taskbar');
+        const clickSound = new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU"); // Placeholder for silence/click if needed, not using actual audio to avoid autoplay issues
+
+        async function typeText(text, delay = 50) {
+            const p = document.createElement('div');
+            p.style.marginBottom = "5px";
+            bootContent.appendChild(p);
+            
+            for (let i = 0; i < text.length; i++) {
+                p.textContent += text[i];
+                await new Promise(r => setTimeout(r, delay));
+            }
+        }
+
+        async function runBootSequence() {
+            for (const line of bootText) {
+                await typeText(line, 20); // Fast typing
+                await new Promise(r => setTimeout(r, 100)); // Pause between lines
+            }
+            
+            await new Promise(r => setTimeout(r, 500));
+            bootScreen.style.transition = "opacity 1s";
+            bootScreen.style.opacity = "0";
+            
+            setTimeout(() => {
+                bootScreen.style.display = "none";
+                desktop.classList.remove('hidden');
+                taskbar.classList.remove('hidden');
+                desktop.style.display = "flex";
+                taskbar.style.display = "flex";
+                // Open About window by default
+                openWindow('about');
+            }, 1000);
+        }
+
+        window.onload = function() {
+            runBootSequence();
+            startClock();
+            initMatrix();
+        };
+
+        // --- Window Management ---
+        let highestZ = 10;
+        let startMenuOpen = false;
+
+        function handleIconClick(id) {
+            // Single click for mobile, double click logic handled by HTML attribute
+            if(window.innerWidth < 768) {
+                openWindow(id);
+            }
+        }
+
+        function openWindow(id) {
+            const win = document.getElementById(`window-${id}`);
+            if (win) {
+                highestZ++;
+                win.style.zIndex = highestZ;
+                win.style.display = "flex";
+                
+                // Small delay to allow display:flex to apply before adding class for transition
+                setTimeout(() => {
+                    win.classList.add('open');
+                }, 10);
+                
+                // If on mobile, center it
+                if (window.innerWidth < 768) {
+                    win.style.top = "10%";
+                    win.style.left = "5%";
+                }
+
+                // Add to taskbar if not exists (simplified logic: just highlight active)
+                updateTaskbar();
+            }
+        }
+
+        function closeWindow(id) {
+            const win = document.getElementById(`window-${id}`);
+            if (win) {
+                win.classList.remove('open');
+                setTimeout(() => {
+                    win.style.display = "none";
+                }, 200);
+            }
+        }
+
+        function toggleStartMenu() {
+            const menu = document.getElementById('start-menu');
+            startMenuOpen = !startMenuOpen;
+            if (startMenuOpen) {
+                menu.classList.remove('hidden');
+                menu.style.display = "block";
+            } else {
+                menu.style.display = "none";
+                menu.classList.add('hidden');
+            }
+        }
+
+        // Close start menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('start-menu');
+            const startBtn = document.getElementById('start-btn');
+            
+            // If menu is open AND click is NOT inside menu AND click is NOT on start button
+            if (startMenuOpen && menu && startBtn && !menu.contains(e.target) && !startBtn.contains(e.target)) {
+                startMenuOpen = false;
+                menu.style.display = "none";
+                menu.classList.add('hidden');
+            }
+        });
+
+        function updateTaskbar() {
+            // Placeholder for advanced taskbar logic
+        }
+
+        // --- Clock ---
+        function startClock() {
+            const clockEl = document.getElementById('clock');
+            setInterval(() => {
+                const now = new Date();
+                clockEl.innerText = now.toLocaleTimeString();
+            }, 1000);
+        }
+
+        // --- Draggable Windows ---
+        let isDragging = false;
+        let currentWindow = null;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        function startDrag(e, windowId) {
+            const win = document.getElementById(windowId);
+            currentWindow = win;
+            
+            // Bring to front
+            highestZ++;
+            win.style.zIndex = highestZ;
+
+            if (e.type === "touchstart") {
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+            } else {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+            }
+
+            // Get current transform translate values if any (simplified: we use left/top)
+            // But for this simple drag, we calculate offsets from the element's offsetLeft/Top
+            // A more robust way for absolute positioning:
+            const rect = win.getBoundingClientRect();
+            if (e.type === "touchstart") {
+                initialX = e.touches[0].clientX - rect.left;
+                initialY = e.touches[0].clientY - rect.top;
+            } else {
+                initialX = e.clientX - rect.left;
+                initialY = e.clientY - rect.top;
+            }
+
+            isDragging = true;
+        }
+
+        function drag(e) {
+            if (isDragging && currentWindow) {
+                e.preventDefault();
+                let currentX, currentY;
+
+                if (e.type === "touchmove") {
+                    currentX = e.touches[0].clientX - initialX;
+                    currentY = e.touches[0].clientY - initialY;
+                } else {
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                }
+
+                currentWindow.style.left = `${currentX}px`;
+                currentWindow.style.top = `${currentY}px`;
+            }
+        }
+
+        function stopDrag() {
+            initialX = currentWindow ? currentWindow.offsetLeft : 0;
+            initialY = currentWindow ? currentWindow.offsetTop : 0;
+            isDragging = false;
+            currentWindow = null;
+        }
+
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", stopDrag);
+        document.addEventListener("touchmove", drag, {passive: false});
+        document.addEventListener("touchend", stopDrag);
+
+        // --- Matrix Rain Effect ---
+        function initMatrix() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリBgD10';
+            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const nums = '0123456789';
+            const alphabet = katakana + latin + nums;
+
+            const fontSize = 16;
+            const columns = canvas.width/fontSize;
+
+            const rainDrops = [];
+
+            for( let x = 0; x < columns; x++ ) {
+                rainDrops[x] = 1;
+            }
+
+            const draw = () => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+
+                for(let i = 0; i < rainDrops.length; i++)
+                {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i*fontSize, rainDrops[i]*fontSize);
+
+                    if(rainDrops[i]*fontSize > canvas.height && Math.random() > 0.975){
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
+                }
+            };
+
+            setInterval(draw, 30);
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        // NEW: Copy to clipboard function for phone number
+        function copyPhoneNumber() {
+            const phoneNumber = "+91 7017666204";
+            const btn = document.getElementById('phone-btn');
+            
+            // Create temporary textarea to copy text
+            const textarea = document.createElement('textarea');
+            textarea.value = phoneNumber;
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                // Visual feedback
+                const originalText = btn.innerText;
+                btn.innerText = "COPIED!";
+                btn.style.backgroundColor = "var(--phosphor-main)";
+                btn.style.color = "black";
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.backgroundColor = "transparent";
+                    btn.style.color = "var(--phosphor-main)";
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy', err);
+            }
+            
+            document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+</html>
