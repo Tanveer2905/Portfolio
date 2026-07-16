@@ -1,823 +1,1237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tanveer Ahmad | Backend Developer | System v1.0</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --phosphor-main: #33ff33;
-            --phosphor-dim: #22aa22;
-            --bg-color: #050505;
-            --crt-flicker: 0.02;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tanveer Ahmad — AI-focused Software Engineer</title>
+<meta name="description" content="Portfolio of Tanveer Ahmad — AI-focused software engineer building RAG systems, computer vision and real-time backends. Creator of LOCAGO (deployed with Govt. of Uttarakhand), AetherMath and SCAN.">
+<meta name="author" content="Tanveer Ahmad">
+<meta property="og:title" content="Tanveer Ahmad — AI-focused Software Engineer">
+<meta property="og:description" content="RAG systems · Computer Vision · Real-time backends. Boot the OS to explore projects, experience and code.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/96965755?v=4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23030503'/%3E%3Ctext x='10' y='46' font-family='monospace' font-size='38' fill='%2333ff33'%3ET%3E%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TANVEER-OS v2.0 — phosphor CRT design tokens
+   ============================================================ */
+:root{
+  --phos:        #33ff33;              /* primary green phosphor   */
+  --phos-dim:    #1d9e1d;              /* secondary green          */
+  --phos-faint:  rgba(51,255,51,.08);  /* fills / hovers           */
+  --amber:       #ffb000;              /* metric / highlight color */
+  --bg:          #030503;
+  --panel:       #000;
+  --glow:        0 0 6px rgba(51,255,51,.55);
+  --font-crt:    'VT323', monospace;
+  --font-body:   'IBM Plex Mono', monospace;
+}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--phosphor-main);
-            font-family: 'VT323', monospace;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
-            user-select: none;
-        }
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--phos);
+  font-family:var(--font-crt);
+  font-size:20px;
+  overflow:hidden;
+  -webkit-font-smoothing:none;
+}
+::selection{ background:var(--phos); color:#000; }
 
-        /* --- CRT Effects --- */
-        #crt-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-            z-index: 9999;
-            animation: flicker 0.15s infinite;
-        }
+a{ color:var(--phos); }
+button{ font-family:inherit; }
 
-        #scanline {
-            width: 100%;
-            height: 10px;
-            background: rgba(51, 255, 51, 0.1);
-            position: absolute;
-            z-index: 9998;
-            left: 0;
-            top: 0;
-            pointer-events: none;
-            animation: scanline 6s linear infinite;
-        }
+:focus-visible{
+  outline:2px dashed var(--amber);
+  outline-offset:2px;
+}
 
-        @keyframes scanline {
-            0% { top: -10%; }
-            100% { top: 110%; }
-        }
+/* ---------- CRT overlay ---------- */
+#crt-overlay{
+  position:fixed; inset:0; z-index:12000; pointer-events:none;
+  background:
+    linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%),
+    linear-gradient(90deg, rgba(255,0,0,.05), rgba(0,255,0,.02), rgba(0,0,255,.05));
+  background-size:100% 2px, 3px 100%;
+  animation:flicker .15s infinite;
+}
+#scanline{
+  position:fixed; left:0; top:0; width:100%; height:10px; z-index:11990;
+  background:rgba(51,255,51,.08); pointer-events:none;
+  animation:scanline 7s linear infinite;
+}
+@keyframes scanline{ 0%{top:-4%} 100%{top:104%} }
+@keyframes flicker{ 0%{opacity:.96} 5%{opacity:.88} 10%{opacity:.96} 100%{opacity:.92} }
 
-        @keyframes flicker {
-            0% { opacity: 0.95; }
-            5% { opacity: 0.85; }
-            10% { opacity: 0.95; }
-            100% { opacity: 0.9; }
-        }
+/* ---------- boot screen ---------- */
+#boot-screen{
+  position:fixed; inset:0; z-index:13000;
+  background:#000; padding:38px 34px;
+  font-size:1.05rem; line-height:1.55;
+  overflow:hidden; cursor:pointer;
+}
+#boot-text div{ white-space:pre-wrap; }
+#boot-banner{
+  color:var(--phos); text-shadow:var(--glow);
+  font-size:clamp(.55rem,2.2vw,1.05rem);
+  line-height:1.15; margin:14px 0 4px; white-space:pre;
+}
+#boot-skip{
+  position:absolute; bottom:22px; left:34px;
+  color:var(--phos-dim); font-size:1rem;
+}
+.blink{ animation:blinker 1s step-start infinite; }
+@keyframes blinker{ 50%{opacity:0} }
 
-        /* --- UI Elements --- */
-        .desktop-icon {
-            cursor: pointer;
-            transition: all 0.2s;
-            text-shadow: 0 0 5px var(--phosphor-main);
-        }
-        .desktop-icon:hover {
-            background-color: rgba(51, 255, 51, 0.2);
-            border: 1px dashed var(--phosphor-main);
-        }
+/* ---------- matrix rain ---------- */
+#matrix-canvas{ position:fixed; inset:0; z-index:0; opacity:.5; }
 
-        .window {
-            position: absolute;
-            background-color: #000;
-            border: 2px solid var(--phosphor-main);
-            box-shadow: 0 0 15px rgba(51, 255, 51, 0.3);
-            display: flex;
-            flex-direction: column;
-            min-width: 300px;
-            max-width: 90vw;
-            max-height: 80vh;
-            opacity: 0; 
-            transform: scale(0.95);
-            transition: opacity 0.2s, transform 0.2s;
-        }
+/* ---------- desktop ---------- */
+#desktop{
+  position:fixed; inset:0 0 48px 0; z-index:10;
+  padding:26px 22px;
+  display:none;
+  flex-direction:column; flex-wrap:wrap;
+  align-content:flex-start; align-items:flex-start;
+  gap:18px;
+}
+#desktop.on{ display:flex; }
 
-        .window.open {
-            opacity: 1;
-            transform: scale(1);
-        }
+.icon{
+  width:104px; padding:12px 6px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  background:transparent; border:1px dashed transparent;
+  color:var(--phos); cursor:pointer;
+  text-shadow:var(--glow); font-size:.82em; text-transform:uppercase;
+  transition:background .15s,border-color .15s;
+}
+.icon svg{ width:44px; height:44px; }
+.icon:hover, .icon:focus-visible{
+  background:var(--phos-faint); border-color:var(--phos);
+}
+.icon:active{ transform:translateY(1px); }
+.icon span{ text-align:center; line-height:1.15; }
 
-        .title-bar {
-            background-color: var(--phosphor-main);
-            color: #000;
-            padding: 4px 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: grab;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
+#desk-hint{
+  position:fixed; top:14px; right:18px; z-index:10;
+  color:var(--phos-dim); font-size:.92rem; text-align:right;
+  pointer-events:none; display:none;
+}
+#desktop.on ~ #desk-hint{ display:block; }
 
-        .title-bar:active {
-            cursor: grabbing;
-        }
+/* ---------- windows ---------- */
+.window{
+  position:absolute; z-index:20;
+  display:none; flex-direction:column;
+  width:min(var(--w,520px), 94vw);
+  max-height:76vh;
+  background:var(--panel);
+  border:2px solid var(--phos-dim);
+  box-shadow:0 0 14px rgba(51,255,51,.18);
+  opacity:0; transform:scale(.96);
+  transition:opacity .18s ease, transform .18s ease,
+             border-color .18s ease, box-shadow .18s ease;
+}
+.window.open{ opacity:1; transform:scale(1); }
+.window.active{
+  border-color:var(--phos);
+  box-shadow:0 0 22px rgba(51,255,51,.35);
+}
 
-        .window-content {
-            padding: 16px;
-            overflow-y: auto;
-            color: var(--phosphor-main);
-        }
+.title-bar{
+  flex:0 0 auto;
+  background:var(--phos-dim); color:#000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:3px 8px; gap:8px;
+  font-weight:bold; text-transform:uppercase; letter-spacing:1px;
+  cursor:grab; user-select:none; touch-action:none;
+}
+.window.active .title-bar{ background:var(--phos); }
+.title-bar:active{ cursor:grabbing; }
+.tb-btns{ display:flex; gap:4px; }
+.tb-btn{
+  border:1px solid #000; background:transparent; color:#000;
+  padding:0 7px; cursor:pointer; font-weight:bold; font-size:.95em;
+}
+.tb-btn:hover{ background:#000; color:var(--phos); }
 
-        .window-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        .window-content::-webkit-scrollbar-track {
-            background: #000; 
-        }
-        .window-content::-webkit-scrollbar-thumb {
-            background: var(--phosphor-dim); 
-        }
+.win-body{
+  overflow-y:auto; padding:16px 18px;
+  font-family:var(--font-body); font-size:13.5px; line-height:1.62;
+}
+.win-body::-webkit-scrollbar{ width:9px; }
+.win-body::-webkit-scrollbar-track{ background:#000; }
+.win-body::-webkit-scrollbar-thumb{ background:var(--phos-dim); }
 
-        .close-btn {
-            cursor: pointer;
-            font-weight: bold;
-            padding: 0 5px;
-        }
-        .close-btn:hover {
-            background-color: #000;
-            color: var(--phosphor-main);
-        }
+.win-body h2,.win-body h3{ font-family:var(--font-crt); font-weight:normal; }
+.crt-h{
+  font-family:var(--font-crt); font-size:1.35rem; letter-spacing:.5px;
+  text-shadow:var(--glow); margin:18px 0 6px;
+  border-bottom:1px dashed var(--phos-dim); padding-bottom:2px;
+}
+.crt-h:first-child{ margin-top:0; }
+.dim{ color:var(--phos-dim); }
+.amb{ color:var(--amber); }
+.cmdline{ font-family:var(--font-crt); font-size:1.1rem; margin:0 0 10px; }
 
-        /* --- Boot Screen --- */
-        #boot-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            z-index: 10000;
-            padding: 40px;
-            font-size: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
+/* tags & buttons */
+.tag{
+  display:inline-block; padding:0 6px; margin:0 4px 4px 0;
+  background:rgba(29,158,29,.35); border:1px solid var(--phos-dim);
+  font-size:11.5px; letter-spacing:.4px;
+}
+.tag.ai{ border-color:var(--amber); color:var(--amber); background:rgba(255,176,0,.08); }
+.btn{
+  display:inline-block; padding:2px 10px; margin:4px 6px 0 0;
+  border:1px solid var(--phos); background:transparent; color:var(--phos);
+  font-family:var(--font-crt); font-size:1rem; letter-spacing:.5px;
+  text-decoration:none; cursor:pointer;
+}
+.btn:hover, .btn:focus-visible{ background:var(--phos); color:#000; }
+.btn.solid{ background:var(--phos); color:#000; }
+.btn.solid:hover{ background:#fff; border-color:#fff; }
 
-        .blink {
-            animation: blinker 1s linear infinite;
-        }
-        @keyframes blinker {
-            50% { opacity: 0; }
-        }
+/* about window */
+.about-head{
+  display:flex; gap:14px; align-items:center;
+  border-bottom:1px solid var(--phos-dim); padding-bottom:12px; margin-bottom:12px;
+}
+.avatar{
+  width:72px; height:72px; flex:0 0 auto;
+  border:1px solid var(--phos);
+  filter:grayscale(1) sepia(1) hue-rotate(65deg) saturate(3.2) brightness(.92);
+}
+.about-head h2{ margin:0; font-size:1.7rem; text-shadow:var(--glow); }
+.about-head p{ margin:2px 0 0; color:var(--phos-dim); font-family:var(--font-crt); font-size:1.05rem; }
+.statline{ margin-top:12px; font-size:12.5px; color:var(--phos-dim); }
+.statline b{ color:var(--amber); font-weight:500; }
 
-        /* --- Canvas Background --- */
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
+/* skills window */
+.skill-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px 22px; }
+.skill-grid h3{
+  margin:0 0 4px; font-size:1.15rem;
+  background:rgba(29,158,29,.4); padding:0 6px; display:inline-block;
+}
+.skill-grid h3.ai{ background:rgba(255,176,0,.14); color:var(--amber); }
+.skill-grid ul{ list-style:none; margin:0; padding:0; }
+.skill-grid li{ padding:1px 0; }
+.ok{ color:var(--phos-dim); margin-right:6px; }
+.skill-full{ grid-column:1 / -1; }
 
-        /* Start Menu */
-        #taskbar {
-            border-top: 2px solid var(--phosphor-main);
-            background: #000;
-        }
-        
-        .start-menu-item:hover {
-            background-color: var(--phosphor-main);
-            color: black;
-        }
+/* project cards */
+.card{
+  border:1px solid var(--phos-dim); padding:12px 14px; margin-bottom:14px;
+  transition:box-shadow .15s, border-color .15s;
+}
+.card:hover{ border-color:var(--phos); box-shadow:0 0 12px rgba(51,255,51,.22); }
+.card-head{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:baseline; }
+.card h3{ margin:0 0 6px; font-size:1.35rem; text-shadow:var(--glow); }
+.status{ font-family:var(--font-crt); font-size:.95rem; color:var(--amber); white-space:nowrap; }
+.card ul{ margin:8px 0 4px; padding-left:18px; }
+.card li{ margin:2px 0; }
 
-        /* Glitch Text Effect */
-        .glitch-hover:hover {
-            animation: glitch-anim 0.3s infinite;
-        }
+/* career timeline */
+.tl{ border-left:2px dashed var(--phos-dim); margin-left:6px; padding:0 0 20px 16px; position:relative; }
+.tl:last-child{ padding-bottom:4px; }
+.tl::before{
+  content:""; position:absolute; left:-7px; top:4px;
+  width:12px; height:12px; background:var(--phos);
+  box-shadow:var(--glow);
+}
+.tl h3{ margin:0; font-size:1.3rem; }
+.tl .where{ color:var(--phos-dim); font-family:var(--font-crt); font-size:1.02rem; margin:1px 0 6px; }
+.tl ul{ margin:0; padding-left:18px; }
+.tl li{ margin:2px 0; }
 
-        @keyframes glitch-anim {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 2px) }
-            40% { transform: translate(-2px, -2px) }
-            60% { transform: translate(2px, 2px) }
-            80% { transform: translate(2px, -2px) }
-            100% { transform: translate(0) }
-        }
+/* terminal window */
+#window-terminal .win-body{ padding:0; display:flex; flex-direction:column; font-family:var(--font-crt); font-size:1.08rem; }
+#term-out{ flex:1 1 auto; overflow-y:auto; padding:14px 16px 6px; min-height:220px; }
+#term-out div{ white-space:pre-wrap; word-break:break-word; }
+#term-out a{ color:var(--amber); }
+.t-prompt{ color:var(--phos-dim); }
+.t-err{ color:#ff5f4d; }
+.t-amb{ color:var(--amber); }
+#term-form{
+  flex:0 0 auto; display:flex; gap:8px; align-items:center;
+  padding:6px 16px 12px;
+}
+#term-input{
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--phos); font-family:var(--font-crt); font-size:1.08rem;
+  caret-color:var(--phos);
+}
 
-        .project-card {
-            border: 1px solid var(--phosphor-dim);
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .project-card:hover {
-            box-shadow: 0 0 10px var(--phosphor-dim);
-        }
+/* github window */
+.repo{ border-bottom:1px dashed rgba(29,158,29,.5); padding:9px 0; }
+.repo:last-child{ border-bottom:none; }
+.repo-head{ display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; }
+.repo-head a{ font-family:var(--font-crt); font-size:1.22rem; text-decoration:none; text-shadow:var(--glow); }
+.repo-head a:hover{ color:var(--amber); }
+.repo-meta{ font-size:11.5px; color:var(--phos-dim); }
+.repo p{ margin:3px 0 0; }
 
-        /* Utilities */
-        .text-phosphor { color: var(--phosphor-main); }
-        .bg-phosphor { background-color: var(--phosphor-main); }
-        .border-phosphor { border-color: var(--phosphor-main); }
-    </style>
+/* contact window */
+.mail-field{ margin-bottom:8px; }
+.mail-field span{ color:var(--phos-dim); }
+.mail-box{
+  border:1px solid var(--phos-dim); padding:8px 10px; margin:10px 0 14px;
+  color:var(--phos-dim); font-size:12.5px; min-height:56px;
+}
+.contact-btns{ display:flex; flex-wrap:wrap; gap:6px; }
+
+/* ---------- taskbar ---------- */
+#taskbar{
+  position:fixed; left:0; bottom:0; width:100%; height:48px; z-index:11000;
+  display:none; align-items:center; justify-content:space-between;
+  padding:0 8px; gap:8px;
+  background:#000; border-top:2px solid var(--phos);
+}
+#taskbar.on{ display:flex; }
+#start-btn{
+  height:32px; padding:0 16px; flex:0 0 auto;
+  background:var(--phos); color:#000; border:2px solid transparent;
+  font-family:var(--font-crt); font-size:1.15rem; font-weight:bold;
+  letter-spacing:1px; cursor:pointer;
+  display:flex; align-items:center; gap:8px;
+}
+#start-btn:hover{ background:#fff; }
+#task-tabs{
+  flex:1 1 auto; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+}
+#task-tabs::-webkit-scrollbar{ display:none; }
+.task-tab{
+  flex:0 0 auto; height:32px; padding:0 12px;
+  background:transparent; border:1px solid var(--phos-dim); color:var(--phos);
+  font-family:var(--font-crt); font-size:1rem; letter-spacing:.5px; cursor:pointer;
+  max-width:170px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.task-tab.active{ background:var(--phos); color:#000; border-color:var(--phos); }
+.task-tab.min{ opacity:.55; }
+#clock{
+  flex:0 0 auto; height:32px; padding:0 12px;
+  display:flex; align-items:center;
+  border-left:2px solid var(--phos); font-size:1.1rem;
+}
+
+/* ---------- start menu ---------- */
+#start-menu{
+  position:fixed; left:8px; bottom:52px; width:270px; z-index:11500;
+  display:none; background:#000; border:2px solid var(--phos);
+  box-shadow:0 0 20px rgba(51,255,51,.25);
+}
+#start-menu.on{ display:block; }
+#start-menu .sm-head{
+  background:var(--phos); color:#000; text-align:center;
+  padding:4px; font-weight:bold; letter-spacing:2px;
+}
+#start-menu ul{ list-style:none; margin:0; padding:6px 0; }
+#start-menu li{ padding:0; }
+#start-menu .sm-item{
+  display:block; width:100%; text-align:left;
+  padding:7px 16px; background:none; border:none; color:var(--phos);
+  font-family:var(--font-crt); font-size:1.12rem; cursor:pointer;
+  text-decoration:none;
+}
+#start-menu .sm-item:hover, #start-menu .sm-item:focus-visible{ background:var(--phos); color:#000; }
+#start-menu .sm-div{ border-top:1px dashed var(--phos-dim); margin:5px 0; }
+
+/* ---------- mobile ---------- */
+@media (max-width:760px){
+  #desktop{ flex-direction:row; align-content:flex-start; padding:16px 10px; gap:8px; }
+  .icon{ width:86px; padding:10px 4px; }
+  .icon svg{ width:36px; height:36px; }
+  #desk-hint{ display:none !important; }
+  .window{ max-height:72vh; }
+  .skill-grid{ grid-template-columns:1fr; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  #crt-overlay,#scanline{ animation:none; }
+  #scanline{ display:none; }
+  .window{ transition:none; }
+  .blink{ animation:none; }
+}
+</style>
 </head>
-<body class="text-xl">
+<body>
 
-    <!-- CRT Overlay Effects -->
-    <div id="crt-overlay"></div>
-    <div id="scanline"></div>
+<!-- CRT overlay effects -->
+<div id="crt-overlay" aria-hidden="true"></div>
+<div id="scanline" aria-hidden="true"></div>
 
-    <!-- Boot Screen -->
-    <div id="boot-screen">
-        <div id="boot-text"></div>
+<!-- Boot screen -->
+<div id="boot-screen">
+  <div id="boot-text" aria-live="polite"></div>
+  <div id="boot-skip">PRESS ANY KEY OR TAP TO SKIP <span class="blink">_</span></div>
+</div>
+
+<!-- Matrix rain -->
+<canvas id="matrix-canvas" aria-hidden="true"></canvas>
+
+<!-- ==================== DESKTOP ==================== -->
+<div id="desktop">
+  <button class="icon" data-open="about">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+    <span>SYSTEM_INFO</span>
+  </button>
+
+  <button class="icon" data-open="projects">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+    <span>PROJECTS_DIR</span>
+  </button>
+
+  <button class="icon" data-open="skills">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+    <span>SKILLS.SYS</span>
+  </button>
+
+  <button class="icon" data-open="career">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+    <span>CAREER.LOG</span>
+  </button>
+
+  <button class="icon" data-open="terminal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+    <span>TERMINAL.EXE</span>
+  </button>
+
+  <button class="icon" data-open="github">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+    <span>GITHUB.EXE</span>
+  </button>
+
+  <a class="icon" href="Tanveer_Ahmad_Resume.pdf" target="_blank" rel="noopener" style="text-decoration:none">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M12 18v-6"></path><path d="m9 15 3 3 3-3"></path></svg>
+    <span>RESUME.PDF</span>
+  </a>
+
+  <button class="icon" data-open="contact">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+    <span>MAIL_ME</span>
+  </button>
+
+  <a class="icon" href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener" style="text-decoration:none">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+    <span>LINKEDIN.EXE</span>
+  </a>
+</div>
+
+<div id="desk-hint">DOUBLE-CLICK AN ICON · ESC CLOSES WINDOWS<br>TRY TERMINAL.EXE AND TYPE "HELP"</div>
+
+<!-- ==================== WINDOWS ==================== -->
+
+<!-- ABOUT -->
+<div class="window" id="window-about" role="dialog" aria-label="About Tanveer Ahmad" style="--w:480px; top:9%; left:7%;">
+  <div class="title-bar" data-win="about">
+    <span>SYSTEM_INFO</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="about" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="about" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <div class="about-head">
+      <img class="avatar" src="https://avatars.githubusercontent.com/u/96965755?v=4" alt="Tanveer Ahmad" width="72" height="72"
+           onerror="this.outerHTML='&lt;div class=&quot;avatar&quot; style=&quot;display:flex;align-items:center;justify-content:center;font-family:var(--font-crt);font-size:2rem&quot;&gt;TA&lt;/div&gt;'">
+      <div>
+        <h2>TANVEER AHMAD</h2>
+        <p>AI-focused Software Engineer</p>
+      </div>
     </div>
 
-    <!-- Matrix Background -->
-    <canvas id="matrix-canvas"></canvas>
+    <p class="cmdline dim">&gt; cat profile.txt</p>
+    <p>AI-focused software engineer building production-grade systems that combine
+    machine learning, real-time architectures and backend engineering. Strong in
+    <span class="amb">RAG systems</span>, <span class="amb">computer vision</span> and
+    scalable API design — with real-world exposure through a
+    <span class="amb">government deployment</span> and cross-functional product work.</p>
 
-    <!-- Desktop Environment -->
-    <!-- UPDATED: Added flex-wrap, content-start, and reduced gap to gap-6 to fit icons on screen -->
-    <div id="desktop" class="relative w-full h-full p-8 hidden flex flex-col flex-wrap content-start items-start gap-6 z-10">
-        
-        <!-- Desktop Icons -->
-        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('about')" onclick="handleIconClick('about')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-            <span class="text-center text-sm">SYSTEM_INFO</span>
-        </div>
+    <h3 class="crt-h">&gt; EDUCATION</h3>
+    <p>B.Tech — Computer Science Engineering<br>
+    <span class="dim">Uttarakhand Technical University · 2021–2025</span></p>
 
-        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('skills')" onclick="handleIconClick('skills')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
-            <span class="text-center text-sm">TERMINAL.EXE</span>
-        </div>
+    <h3 class="crt-h">&gt; CERTIFICATION</h3>
+    <p>Google Cybersecurity Professional Certificate <span class="dim">· May 2024</span><br>
+    <span class="dim">SIEM analysis, network security, threat detection &amp; incident response;
+    Python and SQL for security automation.</span></p>
 
-        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('projects')" onclick="handleIconClick('projects')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-            <span class="text-center text-sm">PROJECTS_DIR</span>
-        </div>
+    <p class="statline">STATUS: <b>16</b> public repos · <b>1</b> govt-deployed system ·
+    <b>3</b> flagship AI/backend projects</p>
 
-        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('experience')" onclick="handleIconClick('experience')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            <span class="text-center text-sm">CAREER.LOG</span>
-        </div>
+    <a class="btn" href="Tanveer_Ahmad_Resume.pdf" target="_blank" rel="noopener">DOWNLOAD RESUME.PDF</a>
+    <button class="btn" data-open="contact">OPEN MAIL_ME</button>
+  </div>
+</div>
 
-        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" ondblclick="openWindow('contact')" onclick="handleIconClick('contact')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-            <span class="text-center text-sm">MAIL_ME</span>
-        </div>
+<!-- SKILLS -->
+<div class="window" id="window-skills" role="dialog" aria-label="Skills" style="--w:580px; top:13%; left:26%;">
+  <div class="title-bar" data-win="skills">
+    <span>SKILLS.SYS</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="skills" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="skills" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <p class="cmdline dim">&gt; run skill_diagnostic --full<br>&gt; scanning kernel capabilities ... <span class="amb">PASS</span></p>
 
-        <!-- NEW: GitHub Icon (Executes link) -->
-        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" onclick="window.open('https://github.com/Tanveer2905', '_blank')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-            </svg>
-            <span class="text-center text-sm">GITHUB.EXE</span>
-        </div>
-
-        <!-- NEW: LinkedIn Icon (Executes link) -->
-        <div class="desktop-icon w-32 flex flex-col items-center justify-center p-4 gap-2" onclick="window.open('https://linkedin.com/in/tanveer-ahmad-6a5468251', '_blank')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round">
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                <rect x="2" y="9" width="4" height="12"></rect>
-                <circle cx="4" cy="4" r="2"></circle>
-            </svg>
-            <span class="text-center text-sm">LINKEDIN.EXE</span>
-        </div>
-    </div>
-
-    <!-- Taskbar -->
-    <div id="taskbar" class="fixed bottom-0 left-0 w-full h-12 flex items-center justify-between px-2 z-50 hidden">
-        <div class="flex items-center h-full">
-            <button id="start-btn" onclick="toggleStartMenu()" class="h-8 px-4 bg-phosphor text-black font-bold uppercase hover:bg-white transition-colors border-2 border-transparent hover:border-phosphor flex items-center gap-2">
-                <span class="text-xl">❖</span> START
-            </button>
-            <div id="active-tasks" class="flex ml-4 gap-2">
-                <!-- Active window tabs go here -->
-            </div>
-        </div>
-        <div class="text-lg px-4 border-l-2 border-phosphor h-8 flex items-center" id="clock">
-            00:00:00
-        </div>
-    </div>
-
-    <!-- Start Menu -->
-    <div id="start-menu" class="fixed bottom-12 left-2 w-64 bg-black border-2 border-phosphor hidden z-50 shadow-lg shadow-green-900/20">
-        <div class="bg-phosphor text-black p-2 font-bold text-center">SYSTEM MENU</div>
-        <ul class="py-2">
-            <li class="px-4 py-2 start-menu-item cursor-pointer" onclick="openWindow('about'); toggleStartMenu()">System Info</li>
-            <li class="px-4 py-2 start-menu-item cursor-pointer" onclick="openWindow('skills'); toggleStartMenu()">Run Diagnostics (Skills)</li>
-            <li class="px-4 py-2 start-menu-item cursor-pointer" onclick="openWindow('projects'); toggleStartMenu()">Browse Files (Projects)</li>
-            <li class="px-4 py-2 start-menu-item cursor-pointer" onclick="openWindow('contact'); toggleStartMenu()">Shut Down (Contact)</li>
+    <div class="skill-grid">
+      <div>
+        <h3 class="ai">AI / ML</h3>
+        <ul>
+          <li><span class="ok">[ok]</span>RAG &amp; LLM systems</li>
+          <li><span class="ok">[ok]</span>Computer Vision</li>
+          <li><span class="ok">[ok]</span>Deep Learning</li>
+          <li><span class="ok">[ok]</span>Ensemble Learning</li>
+          <li><span class="ok">[ok]</span>NLP</li>
         </ul>
+      </div>
+      <div>
+        <h3>LANGUAGES</h3>
+        <ul>
+          <li><span class="ok">[ok]</span>Python</li>
+          <li><span class="ok">[ok]</span>JavaScript</li>
+          <li><span class="ok">[ok]</span>Kotlin</li>
+          <li><span class="ok">[ok]</span>SQL</li>
+        </ul>
+      </div>
+      <div>
+        <h3>FRAMEWORKS</h3>
+        <ul>
+          <li><span class="ok">[ok]</span>Flask · Django · FastAPI</li>
+          <li><span class="ok">[ok]</span>TensorFlow · Keras</li>
+          <li><span class="ok">[ok]</span>Scikit-learn</li>
+        </ul>
+      </div>
+      <div>
+        <h3>BACKEND</h3>
+        <ul>
+          <li><span class="ok">[ok]</span>REST APIs</li>
+          <li><span class="ok">[ok]</span>WebSockets</li>
+          <li><span class="ok">[ok]</span>Event-driven architecture</li>
+          <li><span class="ok">[ok]</span>Database design</li>
+        </ul>
+      </div>
+      <div class="skill-full">
+        <h3>TOOLS &amp; PLATFORMS</h3>
+        <p style="margin:4px 0 0">FAISS · SQLite · OpenCV · Git · Postman · Android (Kotlin) · Web applications</p>
+      </div>
+    </div>
+    <p class="cmdline dim" style="margin-top:12px">&gt; diagnostic complete <span class="blink">_</span></p>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="window" id="window-projects" role="dialog" aria-label="Projects" style="--w:660px; top:6%; left:18%;">
+  <div class="title-bar" data-win="projects">
+    <span>PROJECTS_DIR</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="projects" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="projects" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <p class="cmdline dim">&gt; ls -la /home/tanveer/projects</p>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>AETHERMATH</h3>
+        <span class="status">[ RAG · MULTI-AGENT ]</span>
+      </div>
+      <div>
+        <span class="tag ai">RAG</span><span class="tag ai">LLMs</span><span class="tag">FAISS</span><span class="tag">SQLite</span><span class="tag">Multimodal</span>
+      </div>
+      <p>Self-improving multimodal AI math mentor that solves problems from
+      <b>text, image and audio</b> input.</p>
+      <ul>
+        <li>Structured agent pipeline — <span class="amb">parser → solver → verifier → explainer</span> — to reduce hallucinations</li>
+        <li>Self-learning memory: SQLite + similarity search with human-in-the-loop feedback</li>
+        <li>FAISS + embeddings for context-aware retrieval</li>
+      </ul>
+      <a class="btn" href="mailto:ahmadtanveer.2905@gmail.com?subject=AetherMath%20demo">REQUEST DEMO</a>
     </div>
 
-    <!-- WINDOWS -->
-
-    <!-- About Window -->
-    <div id="window-about" class="window" style="top: 10%; left: 10%; z-index: 10;">
-        <div class="title-bar" onmousedown="startDrag(event, 'window-about')" ontouchstart="startDrag(event, 'window-about')">
-            <span>SYSTEM_INFO</span>
-            <span class="close-btn" onclick="closeWindow('about')">[X]</span>
-        </div>
-        <div class="window-content w-[400px] h-[300px]">
-            <div class="flex items-center gap-4 mb-4 border-b border-phosphor pb-4">
-                <div class="w-16 h-16 border border-phosphor flex items-center justify-center text-4xl bg-green-900/30">
-                    TA
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold">TANVEER AHMAD</h2>
-                    <p class="opacity-80">Backend Developer | Cloud Engineer</p>
-                </div>
-            </div>
-            <p class="mb-4 text-justify">
-                > INITIALIZING USER PROFILE...<br>
-                > Backend Developer skilled in Python, Django, and REST APIs.<br>
-                > Passionate about backend architecture, cybersecurity, and AI-powered systems.<br>
-                > Experienced in building scalable, secure, and cloud-ready applications.
-            </p>
-            <div class="mt-4">
-                <h3 class="font-bold border-b border-dashed border-phosphor mb-2">> EDUCATION</h3>
-                <p>B.Tech Computer Science Engineering</p>
-                <p class="text-sm opacity-80">Uttarakhand Technical University (2021-2025)</p>
-                <p class="text-sm opacity-80">CGPA: 7.8/10</p>
-            </div>
-            <div class="mt-4">
-                <h3 class="font-bold border-b border-dashed border-phosphor mb-2">> CERTIFICATIONS</h3>
-                <ul class="list-disc pl-5 text-sm">
-                    <li>Google Cybersecurity Certificate</li>
-                    <li>Google Cloud Skill Badges (Vertex AI, BigQuery)</li>
-                    <li>Google Cloud Cybersecurity Essentials</li>
-                </ul>
-            </div>
-        </div>
+    <div class="card">
+      <div class="card-head">
+        <h3>LOCAGO</h3>
+        <span class="status">[ DEPLOYED · GOVT. OF UTTARAKHAND ]</span>
+      </div>
+      <div>
+        <span class="tag">Flask</span><span class="tag">PostgreSQL</span><span class="tag">WebSockets</span><span class="tag">Twilio</span>
+      </div>
+      <p>Real-time GPS emergency dispatch system for police, fire and ambulance
+      services, built for the District Administration of Tehri Garhwal.</p>
+      <ul>
+        <li>One-click emergency interface cut request initiation time by <span class="amb">~80–90%</span></li>
+        <li>Nearest-vehicle allocation algorithm improved response time by <span class="amb">~30–50%</span></li>
+        <li>WebSocket live tracking with <span class="amb">sub-second latency</span>; live location / ETA / contact exchange improved coordination by <span class="amb">~40%+</span></li>
+      </ul>
+      <a class="btn" href="https://github.com/Tanveer2905/Locago" target="_blank" rel="noopener">VIEW SOURCE</a>
     </div>
 
-    <!-- Skills Window -->
-    <div id="window-skills" class="window" style="top: 15%; left: 30%; z-index: 9;">
-        <div class="title-bar" onmousedown="startDrag(event, 'window-skills')" ontouchstart="startDrag(event, 'window-skills')">
-            <span>TERMINAL.EXE</span>
-            <span class="close-btn" onclick="closeWindow('skills')">[X]</span>
-        </div>
-        <div class="window-content w-[500px] h-[400px] font-mono">
-            <p class="mb-2">> run skill_diagnostic.py</p>
-            <p class="mb-4 text-green-700">Analyzing kernel capabilities...</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <h3 class="text-white bg-green-900 px-1 mb-2">LANGUAGES</h3>
-                    <ul class="list-none">
-                        <li>[ok] Python</li>
-                        <li>[ok] Java</li>
-                        <li>[ok] JavaScript</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-white bg-green-900 px-1 mb-2">FRAMEWORKS</h3>
-                    <ul class="list-none">
-                        <li>[ok] Django</li>
-                        <li>[ok] Flask</li>
-                        <li>[ok] FastAPI</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-white bg-green-900 px-1 mb-2">DATABASE</h3>
-                    <ul class="list-none">
-                        <li>[ok] PostgreSQL</li>
-                        <li>[ok] MySQL</li>
-                        <li>[ok] MongoDB</li>
-                        <li>[ok] Redis (Caching)</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-white bg-green-900 px-1 mb-2">CLOUD/DEVOPS</h3>
-                    <ul class="list-none">
-                        <li>[ok] Google Cloud Platform</li>
-                        <li>[ok] Docker</li>
-                        <li>[ok] CI/CD Pipelines</li>
-                        <li>[ok] Serverless</li>
-                    </ul>
-                </div>
-                <div class="col-span-1 md:col-span-2">
-                    <h3 class="text-white bg-green-900 px-1 mb-2">CYBERSECURITY</h3>
-                    <p class="text-sm">> SIEM Tools (Splunk, Chronicle), Network Security, Vulnerability Scanning, Secure Authentication.</p>
-                </div>
-            </div>
-            <p class="mt-4 blink">_</p>
-        </div>
+    <div class="card">
+      <div class="card-head">
+        <h3>SCAN</h3>
+        <span class="status">[ ~96.1% ACCURACY ]</span>
+      </div>
+      <div>
+        <span class="tag ai">Ensemble ×7</span><span class="tag">TensorFlow</span><span class="tag">OpenCV</span><span class="tag">U-Net</span><span class="tag">Flask API</span><span class="tag">Android</span>
+      </div>
+      <p>AI-based plant disease detection system trained on <span class="amb">~54K images</span>
+      with optimized preprocessing and augmentation pipelines.</p>
+      <ul>
+        <li>7-model ensemble reaching <span class="amb">~96.1%</span> classification accuracy</li>
+        <li>U-Net segmentation highlights infected regions — explainable AI output</li>
+        <li>Flask inference API deployed cross-platform: Web + Android (Kotlin)</li>
+      </ul>
+      <a class="btn" href="https://github.com/Tanveer2905/Plant_Disease_detection_ML" target="_blank" rel="noopener">VIEW SOURCE</a>
     </div>
 
-    <!-- Projects Window -->
-    <div id="window-projects" class="window" style="top: 5%; left: 20%; z-index: 8;">
-        <div class="title-bar" onmousedown="startDrag(event, 'window-projects')" ontouchstart="startDrag(event, 'window-projects')">
-            <span>PROJECTS_DIR</span>
-            <span class="close-btn" onclick="closeWindow('projects')">[X]</span>
-        </div>
-        <div class="window-content w-[600px] h-[500px]">
-            <p class="mb-4">> listing directory /home/tanveer/projects...</p>
+    <p class="dim" style="font-size:12px">3 featured entries · run <b>GITHUB.EXE</b> for the full repository index</p>
+  </div>
+</div>
 
-            <!-- Project 1 -->
-            <div class="project-card">
-                <h3 class="text-xl font-bold mb-1">LOCAGO - Vehicle Tracking</h3>
-                <div class="flex gap-2 text-xs mb-2">
-                    <span class="bg-green-900 px-1">Flask</span>
-                    <span class="bg-green-900 px-1">PostgreSQL</span>
-                    <span class="bg-green-900 px-1">Twilio API</span>
-                </div>
-                <p class="text-sm opacity-90 mb-2">
-                    Collaborative project under District Magistrate of Tehri Garhwal.
-                    Built real-time GPS tracking for emergency vehicles (police, ambulance).
-                    Integrated Twilio for SMS alerts and geofencing.
-                </p>
-                <button class="text-xs border border-phosphor px-2 py-1 hover:bg-phosphor hover:text-black">EXECUTE</button>
-            </div>
+<!-- CAREER -->
+<div class="window" id="window-career" role="dialog" aria-label="Experience" style="--w:620px; top:17%; left:13%;">
+  <div class="title-bar" data-win="career">
+    <span>CAREER.LOG</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="career" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="career" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <p class="cmdline dim">&gt; tail -f career.log</p>
 
-            <!-- Project 2 -->
-            <div class="project-card">
-                <h3 class="text-xl font-bold mb-1">Plant Disease Detection API</h3>
-                <div class="flex gap-2 text-xs mb-2">
-                    <span class="bg-green-900 px-1">FastAPI</span>
-                    <span class="bg-green-900 px-1">TensorFlow</span>
-                    <span class="bg-green-900 px-1">GCP</span>
-                </div>
-                <p class="text-sm opacity-90 mb-2">
-                    ML API using ensemble of 8 classification models.
-                    Deployed REST API on Google Cloud returning JSON results and mask overlays.
-                </p>
-                <button class="text-xs border border-phosphor px-2 py-1 hover:bg-phosphor hover:text-black">EXECUTE</button>
-            </div>
-
-            <!-- Project 3 -->
-            <div class="project-card">
-                <h3 class="text-xl font-bold mb-1">Trace Chain Carbon Tracker</h3>
-                <div class="flex gap-2 text-xs mb-2">
-                    <span class="bg-green-900 px-1">Flask</span>
-                    <span class="bg-green-900 px-1">Blockchain</span>
-                </div>
-                <p class="text-sm opacity-90 mb-2">
-                    Developed blockchain-secured APIs for carbon emission data tracking and alert automation.
-                </p>
-                <button class="text-xs border border-phosphor px-2 py-1 hover:bg-phosphor hover:text-black">EXECUTE</button>
-            </div>
-            
-             <p class="mt-4 text-xs opacity-70">Total files found: 3</p>
-        </div>
+    <div class="tl">
+      <h3>Business Analyst Intern</h3>
+      <p class="where">ColoredCow · Dec 2024 – Feb 2025</p>
+      <ul>
+        <li>Contributed to the <span class="amb">Agmarknet 2.0</span> project — requirement gathering, analysis and documentation</li>
+        <li>Created structured documentation bridging business stakeholders and engineering teams</li>
+        <li>Translated business needs into actionable technical requirements</li>
+      </ul>
     </div>
 
-    <!-- Experience Window -->
-    <div id="window-experience" class="window" style="top: 20%; left: 15%; z-index: 8;">
-        <div class="title-bar" onmousedown="startDrag(event, 'window-experience')" ontouchstart="startDrag(event, 'window-experience')">
-            <span>CAREER.LOG</span>
-            <span class="close-btn" onclick="closeWindow('experience')">[X]</span>
-        </div>
-        <div class="window-content w-[550px] h-[400px]">
-            <div class="border-l-2 border-dashed border-phosphor ml-2 pl-4 pb-8 relative">
-                <div class="absolute -left-1.5 top-0 w-3 h-3 bg-phosphor"></div>
-                <h3 class="text-lg font-bold">Backend & Business Analysis Intern</h3>
-                <h4 class="text-md opacity-80">ColoredCow | Dec 2024 - Present</h4>
-                <ul class="list-disc pl-5 text-sm mt-2 opacity-90">
-                    <li>Designed and documented backend APIs, reducing integration time by 20%.</li>
-                    <li>Contributed to scalable backend data models and performed system requirement analysis.</li>
-                </ul>
-            </div>
-
-            <div class="border-l-2 border-dashed border-phosphor ml-2 pl-4 pb-8 relative">
-                <div class="absolute -left-1.5 top-0 w-3 h-3 bg-phosphor"></div>
-                <h3 class="text-lg font-bold">Intern District Administration</h3>
-                <h4 class="text-md opacity-80">Tehri Garhwal | Jun 2024 - Aug 2024</h4>
-                <ul class="list-disc pl-5 text-sm mt-2 opacity-90">
-                    <li>Built Flask + PostgreSQL real-time vehicle tracking system.</li>
-                    <li>Integrated Twilio API for SMS alerts, improving emergency response by 30%.</li>
-                </ul>
-            </div>
-
-            <div class="border-l-2 border-dashed border-phosphor ml-2 pl-4 pb-8 relative">
-                <div class="absolute -left-1.5 top-0 w-3 h-3 bg-phosphor"></div>
-                <h3 class="text-lg font-bold">College Cybersecurity Team Lead</h3>
-                <h4 class="text-md opacity-80">2023 - 2024</h4>
-                <ul class="list-disc pl-5 text-sm mt-2 opacity-90">
-                    <li>Led vulnerability assessments and secure authentication implementation.</li>
-                    <li>Conducted database audits and trained peers on OWASP.</li>
-                </ul>
-            </div>
-
-            <div class="border-l-2 border-dashed border-phosphor ml-2 pl-4 pb-2 relative">
-                <div class="absolute -left-1.5 top-0 w-3 h-3 bg-phosphor"></div>
-                <h3 class="text-lg font-bold">DevRel Lead</h3>
-                <h4 class="text-md opacity-80">HackWithIndia | 2023</h4>
-                <ul class="list-disc pl-5 text-sm mt-2 opacity-90">
-                    <li>Organized backend-focused hackathons.</li>
-                    <li>Mentored teams in API deployment and CI/CD.</li>
-                </ul>
-            </div>
-        </div>
+    <div class="tl">
+      <h3>Software Developer Intern</h3>
+      <p class="where">District Administration, Tehri Garhwal · Jun 2024 – Aug 2024</p>
+      <ul>
+        <li>Built a real-time GPS vehicle tracking system (<span class="amb">Flask + PostgreSQL</span>) for live monitoring of government vehicles</li>
+        <li>Integrated Twilio SMS alerts, improving emergency response efficiency by <span class="amb">30%</span></li>
+        <li>Designed event-based backend workflows and optimized APIs for low-latency tracking</li>
+      </ul>
     </div>
 
-    <!-- Contact Window -->
-    <div id="window-contact" class="window" style="top: 25%; left: 40%; z-index: 11;">
-        <div class="title-bar" onmousedown="startDrag(event, 'window-contact')" ontouchstart="startDrag(event, 'window-contact')">
-            <span>MAIL_CLIENT</span>
-            <span class="close-btn" onclick="closeWindow('contact')">[X]</span>
-        </div>
-        <!-- UPDATED: Increased height to 340px for better button visibility -->
-        <div class="window-content w-[400px] h-[340px] flex flex-col justify-between">
-            <div>
-                <p class="mb-4">To: ahmadtanveer.2905@gmail.com</p>
-                <p class="mb-4">Subject: Connection Request</p>
-                <div class="border border-phosphor p-2 h-20 text-sm opacity-70">
-                    Click button to send mail...
-                </div>
-            </div>
-            
-            <div class="mt-4 flex flex-col gap-2">
-                <a href="mailto:ahmadtanveer.2905@gmail.com" class="text-center bg-phosphor text-black py-1 font-bold hover:bg-white">SEND MESSAGE</a>
-                <div class="flex gap-2 justify-center mt-2">
-                    <!-- UPDATED: Added links with target="_blank" -->
-                    <a href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" class="border border-phosphor px-2 py-1 text-sm hover:bg-phosphor hover:text-black">LINKEDIN</a>
-                    <a href="https://github.com/Tanveer2905" target="_blank" class="border border-phosphor px-2 py-1 text-sm hover:bg-phosphor hover:text-black">GITHUB</a>
-                    <!-- FIX: Changed from tel: link to copy-to-clipboard button to prevent crashes -->
-                    <button id="phone-btn" onclick="copyPhoneNumber()" class="border border-phosphor px-2 py-1 text-sm hover:bg-phosphor hover:text-black bg-transparent cursor-pointer font-inherit">+91 7017666204</button>
-                </div>
-            </div>
-        </div>
+    <div class="tl">
+      <h3>DevRel Lead</h3>
+      <p class="where">HackWithIndia · Jan 2023 – Dec 2023</p>
+      <ul>
+        <li>Organized backend-focused hackathons and coding events across institutions</li>
+        <li>Mentored teams on API development, database integration and CI/CD workflows</li>
+        <li>Facilitated developer onboarding and technical sessions</li>
+      </ul>
     </div>
+  </div>
+</div>
 
-    <script>
-        // --- Boot Sequence Logic ---
-        const bootText = [
-            "BIOS DATE 01/01/24 14:22:00 VER 1.0.2",
-            "CPU: QUANTUM-CORE 4.5GHz",
-            "64GB RAM SYSTEM DETECTED",
-            "Detecting Primary Master ... LOCAGO_DRIVE_01",
-            "Detecting Primary Slave ... BACKEND_DB_02",
-            "",
-            "Loading Kernel ...",
-            "................................................",
-            "Initializing Video Adapter ..... OK",
-            "Initializing Python Environment ..... OK",
-            "Loading User Profile: TANVEER AHMAD ..... OK",
-            "Starting SYSTEM UI ...",
-        ];
+<!-- TERMINAL -->
+<div class="window" id="window-terminal" role="dialog" aria-label="Interactive terminal" style="--w:640px; top:22%; left:32%;">
+  <div class="title-bar" data-win="terminal">
+    <span>TERMINAL.EXE</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="terminal" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="terminal" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <div id="term-out" aria-live="polite"></div>
+    <form id="term-form" autocomplete="off">
+      <label for="term-input" class="t-prompt">tanveer@portfolio:~$</label>
+      <input id="term-input" type="text" spellcheck="false" aria-label="Terminal command input">
+    </form>
+  </div>
+</div>
 
-        const bootScreen = document.getElementById('boot-screen');
-        const bootContent = document.getElementById('boot-text');
-        const desktop = document.getElementById('desktop');
-        const taskbar = document.getElementById('taskbar');
-        const clickSound = new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU"); // Placeholder for silence/click if needed, not using actual audio to avoid autoplay issues
+<!-- GITHUB -->
+<div class="window" id="window-github" role="dialog" aria-label="GitHub repositories" style="--w:660px; top:11%; left:22%;">
+  <div class="title-bar" data-win="github">
+    <span>GITHUB.EXE</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="github" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="github" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <p class="cmdline dim" id="repo-status">&gt; mount github.com/Tanveer2905 ...</p>
+    <div id="repo-list"></div>
+    <p style="margin-top:12px">
+      <a class="btn solid" href="https://github.com/Tanveer2905" target="_blank" rel="noopener">OPEN FULL PROFILE →</a>
+    </p>
+  </div>
+</div>
 
-        async function typeText(text, delay = 50) {
-            const p = document.createElement('div');
-            p.style.marginBottom = "5px";
-            bootContent.appendChild(p);
-            
-            for (let i = 0; i < text.length; i++) {
-                p.textContent += text[i];
-                await new Promise(r => setTimeout(r, delay));
-            }
-        }
+<!-- CONTACT -->
+<div class="window" id="window-contact" role="dialog" aria-label="Contact" style="--w:460px; top:24%; left:40%;">
+  <div class="title-bar" data-win="contact">
+    <span>MAIL_CLIENT</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="contact" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="contact" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <p class="mail-field"><span>TO:</span> ahmadtanveer.2905@gmail.com</p>
+    <p class="mail-field"><span>SUBJECT:</span> Let's build something</p>
+    <div class="mail-box">Open for software engineering, Python and AI/ML roles —
+    full-time, internship or freelance. Average response time: fast.</div>
 
-        async function runBootSequence() {
-            for (const line of bootText) {
-                await typeText(line, 20); // Fast typing
-                await new Promise(r => setTimeout(r, 100)); // Pause between lines
-            }
-            
-            await new Promise(r => setTimeout(r, 500));
-            bootScreen.style.transition = "opacity 1s";
-            bootScreen.style.opacity = "0";
-            
-            setTimeout(() => {
-                bootScreen.style.display = "none";
-                desktop.classList.remove('hidden');
-                taskbar.classList.remove('hidden');
-                desktop.style.display = "flex";
-                taskbar.style.display = "flex";
-                // Open About window by default
-                openWindow('about');
-            }, 1000);
-        }
+    <a class="btn solid" href="mailto:ahmadtanveer.2905@gmail.com?subject=Hello%20Tanveer" style="display:block;text-align:center;margin-bottom:10px">SEND MESSAGE</a>
 
-        window.onload = function() {
-            runBootSequence();
-            startClock();
-            initMatrix();
-        };
+    <div class="contact-btns">
+      <button class="btn" data-copy="ahmadtanveer.2905@gmail.com">COPY EMAIL</button>
+      <button class="btn" data-copy="+91 7017666204">+91 7017666204</button>
+      <a class="btn" href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener">LINKEDIN</a>
+      <a class="btn" href="https://github.com/Tanveer2905" target="_blank" rel="noopener">GITHUB</a>
+    </div>
+  </div>
+</div>
 
-        // --- Window Management ---
-        let highestZ = 10;
-        let startMenuOpen = false;
+<!-- ==================== TASKBAR ==================== -->
+<div id="taskbar">
+  <button id="start-btn" aria-haspopup="true" aria-expanded="false"><span>❖</span> START</button>
+  <div id="task-tabs"></div>
+  <div id="clock">00:00:00</div>
+</div>
 
-        function handleIconClick(id) {
-            // Single click for mobile, double click logic handled by HTML attribute
-            if(window.innerWidth < 768) {
-                openWindow(id);
-            }
-        }
+<!-- Start menu -->
+<nav id="start-menu" aria-label="System menu">
+  <div class="sm-head">SYSTEM MENU</div>
+  <ul>
+    <li><button class="sm-item" data-open="about">System Info</button></li>
+    <li><button class="sm-item" data-open="skills">Run Diagnostics — Skills</button></li>
+    <li><button class="sm-item" data-open="projects">Browse Files — Projects</button></li>
+    <li><button class="sm-item" data-open="career">Read Log — Experience</button></li>
+    <li><button class="sm-item" data-open="terminal">Terminal</button></li>
+    <li><button class="sm-item" data-open="github">GitHub Repositories</button></li>
+    <li class="sm-div" aria-hidden="true"></li>
+    <li><a class="sm-item" href="Tanveer_Ahmad_Resume.pdf" target="_blank" rel="noopener">Download Résumé ↗</a></li>
+    <li><a class="sm-item" href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+    <li class="sm-div" aria-hidden="true"></li>
+    <li><button class="sm-item" data-open="contact">Shut Down — Contact</button></li>
+  </ul>
+</nav>
 
-        function openWindow(id) {
-            const win = document.getElementById(`window-${id}`);
-            if (win) {
-                highestZ++;
-                win.style.zIndex = highestZ;
-                win.style.display = "flex";
-                
-                // Small delay to allow display:flex to apply before adding class for transition
-                setTimeout(() => {
-                    win.classList.add('open');
-                }, 10);
-                
-                // If on mobile, center it
-                if (window.innerWidth < 768) {
-                    win.style.top = "10%";
-                    win.style.left = "5%";
-                }
+<script>
+/* ============================================================
+   TANVEER-OS v2.0 — window manager, boot, terminal, github feed
+   ============================================================ */
+'use strict';
 
-                // Add to taskbar if not exists (simplified logic: just highlight active)
-                updateTaskbar();
-            }
-        }
+const $  = (q, r) => (r || document).querySelector(q);
+const $$ = (q, r) => [...(r || document).querySelectorAll(q)];
+const REDUCED  = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile = () => innerWidth < 761;
 
-        function closeWindow(id) {
-            const win = document.getElementById(`window-${id}`);
-            if (win) {
-                win.classList.remove('open');
-                setTimeout(() => {
-                    win.style.display = "none";
-                }, 200);
-            }
-        }
+const esc = s => String(s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;');
 
-        function toggleStartMenu() {
-            const menu = document.getElementById('start-menu');
-            startMenuOpen = !startMenuOpen;
-            if (startMenuOpen) {
-                menu.classList.remove('hidden');
-                menu.style.display = "block";
-            } else {
-                menu.style.display = "none";
-                menu.classList.add('hidden');
-            }
-        }
+const TITLES = {
+  about:'SYSTEM_INFO', skills:'SKILLS.SYS', projects:'PROJECTS_DIR',
+  career:'CAREER.LOG', terminal:'TERMINAL.EXE', github:'GITHUB.EXE',
+  contact:'MAIL_CLIENT'
+};
 
-        // Close start menu when clicking outside
-        document.addEventListener('click', function(e) {
-            const menu = document.getElementById('start-menu');
-            const startBtn = document.getElementById('start-btn');
-            
-            // If menu is open AND click is NOT inside menu AND click is NOT on start button
-            if (startMenuOpen && menu && startBtn && !menu.contains(e.target) && !startBtn.contains(e.target)) {
-                startMenuOpen = false;
-                menu.style.display = "none";
-                menu.classList.add('hidden');
-            }
-        });
+/* -------------------- window manager -------------------- */
+const wins = {};
+let zTop = 30;
+const openSet = new Set();
 
-        function updateTaskbar() {
-            // Placeholder for advanced taskbar logic
-        }
+function focusWin(id){
+  const w = wins[id]; if(!w) return;
+  zTop++; w.style.zIndex = zTop;
+  $$('.window').forEach(x => x.classList.toggle('active', x === w));
+  $$('.task-tab').forEach(t => t.classList.toggle('active', t.dataset.win === id));
+}
 
-        // --- Clock ---
-        function startClock() {
-            const clockEl = document.getElementById('clock');
-            setInterval(() => {
-                const now = new Date();
-                clockEl.innerText = now.toLocaleTimeString();
-            }, 1000);
-        }
+function openWindow(id){
+  const w = wins[id]; if(!w) return;
+  if(!openSet.has(id)){ openSet.add(id); addTab(id); }
+  if(isMobile()){ w.style.top = '6vh'; w.style.left = '3vw'; }
+  w.style.display = 'flex';
+  requestAnimationFrame(() => requestAnimationFrame(() => w.classList.add('open')));
+  $(`.task-tab[data-win="${id}"]`)?.classList.remove('min');
+  focusWin(id);
+  closeStartMenu();
+  if(id === 'terminal') setTimeout(() => $('#term-input').focus(), 200);
+  if(id === 'github') loadRepos();
+}
 
-        // --- Draggable Windows ---
-        let isDragging = false;
-        let currentWindow = null;
-        let initialX;
-        let initialY;
-        let xOffset = 0;
-        let yOffset = 0;
+function hideWin(id){
+  const w = wins[id];
+  w.classList.remove('open');
+  setTimeout(() => { if(!w.classList.contains('open')) w.style.display = 'none'; }, 190);
+}
 
-        function startDrag(e, windowId) {
-            const win = document.getElementById(windowId);
-            currentWindow = win;
-            
-            // Bring to front
-            highestZ++;
-            win.style.zIndex = highestZ;
+function closeWindow(id){
+  hideWin(id);
+  openSet.delete(id);
+  $(`.task-tab[data-win="${id}"]`)?.remove();
+}
 
-            if (e.type === "touchstart") {
-                initialX = e.touches[0].clientX - xOffset;
-                initialY = e.touches[0].clientY - yOffset;
-            } else {
-                initialX = e.clientX - xOffset;
-                initialY = e.clientY - yOffset;
-            }
+function minimizeWindow(id){
+  hideWin(id);
+  $(`.task-tab[data-win="${id}"]`)?.classList.add('min');
+  $(`.task-tab[data-win="${id}"]`)?.classList.remove('active');
+}
 
-            // Get current transform translate values if any (simplified: we use left/top)
-            // But for this simple drag, we calculate offsets from the element's offsetLeft/Top
-            // A more robust way for absolute positioning:
-            const rect = win.getBoundingClientRect();
-            if (e.type === "touchstart") {
-                initialX = e.touches[0].clientX - rect.left;
-                initialY = e.touches[0].clientY - rect.top;
-            } else {
-                initialX = e.clientX - rect.left;
-                initialY = e.clientY - rect.top;
-            }
+function addTab(id){
+  const b = document.createElement('button');
+  b.className = 'task-tab'; b.dataset.win = id;
+  b.textContent = TITLES[id] || id.toUpperCase();
+  b.addEventListener('click', () => {
+    const w = wins[id];
+    const visible = w.style.display !== 'none' && w.classList.contains('open');
+    if(visible && String(w.style.zIndex) === String(zTop)) minimizeWindow(id);
+    else openWindow(id);
+  });
+  $('#task-tabs').appendChild(b);
+}
 
-            isDragging = true;
-        }
+/* dragging (pointer events cover mouse + touch) */
+function makeDraggable(w){
+  const id  = w.id.replace('window-','');
+  const bar = $('.title-bar', w);
+  w.addEventListener('pointerdown', () => focusWin(id));
+  bar.addEventListener('pointerdown', e => {
+    if(e.target.closest('.tb-btn')) return;
+    e.preventDefault();
+    const r  = w.getBoundingClientRect();
+    const ox = e.clientX - r.left, oy = e.clientY - r.top;
+    bar.setPointerCapture(e.pointerId);
+    const move = ev => {
+      let x = ev.clientX - ox, y = ev.clientY - oy;
+      x = Math.max(90 - r.width, Math.min(x, innerWidth - 90));
+      y = Math.max(0, Math.min(y, innerHeight - 90));
+      w.style.left = x + 'px'; w.style.top = y + 'px';
+    };
+    const up = () => {
+      bar.removeEventListener('pointermove', move);
+      bar.removeEventListener('pointerup', up);
+      bar.removeEventListener('pointercancel', up);
+    };
+    bar.addEventListener('pointermove', move);
+    bar.addEventListener('pointerup', up);
+    bar.addEventListener('pointercancel', up);
+  });
+}
 
-        function drag(e) {
-            if (isDragging && currentWindow) {
-                e.preventDefault();
-                let currentX, currentY;
+/* -------------------- start menu -------------------- */
+let startOpen = false;
+function toggleStartMenu(){
+  startOpen = !startOpen;
+  $('#start-menu').classList.toggle('on', startOpen);
+  $('#start-btn').setAttribute('aria-expanded', startOpen);
+}
+function closeStartMenu(){
+  if(!startOpen) return;
+  startOpen = false;
+  $('#start-menu').classList.remove('on');
+  $('#start-btn').setAttribute('aria-expanded','false');
+}
 
-                if (e.type === "touchmove") {
-                    currentX = e.touches[0].clientX - initialX;
-                    currentY = e.touches[0].clientY - initialY;
-                } else {
-                    currentX = e.clientX - initialX;
-                    currentY = e.clientY - initialY;
-                }
+/* -------------------- clock -------------------- */
+function startClock(){
+  const c = $('#clock');
+  const tick = () => {
+    const n = new Date();
+    c.textContent = n.toLocaleDateString(undefined,{day:'2-digit',month:'short'}).toUpperCase()
+                  + ' ' + n.toLocaleTimeString();
+  };
+  tick(); setInterval(tick, 1000);
+}
 
-                currentWindow.style.left = `${currentX}px`;
-                currentWindow.style.top = `${currentY}px`;
-            }
-        }
+/* -------------------- matrix rain -------------------- */
+let matrixOn = false, matrixTimer = null;
+function initMatrix(){
+  const canvas = $('#matrix-canvas');
+  const ctx = canvas.getContext('2d');
+  const abc = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリ01ABCDEF<>[]{}#$';
+  const fs = 16;
+  let drops = [];
 
-        function stopDrag() {
-            initialX = currentWindow ? currentWindow.offsetLeft : 0;
-            initialY = currentWindow ? currentWindow.offsetTop : 0;
-            isDragging = false;
-            currentWindow = null;
-        }
+  const size = () => {
+    canvas.width = innerWidth; canvas.height = innerHeight;
+    drops = Array(Math.ceil(canvas.width / fs)).fill(1);
+  };
+  size();
+  addEventListener('resize', size);
 
-        document.addEventListener("mousemove", drag);
-        document.addEventListener("mouseup", stopDrag);
-        document.addEventListener("touchmove", drag, {passive: false});
-        document.addEventListener("touchend", stopDrag);
+  const draw = () => {
+    ctx.fillStyle = 'rgba(0,0,0,0.06)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#1d9e1d';
+    ctx.font = fs + 'px monospace';
+    for(let i = 0; i < drops.length; i++){
+      ctx.fillText(abc.charAt(Math.floor(Math.random() * abc.length)), i * fs, drops[i] * fs);
+      if(drops[i] * fs > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    }
+  };
 
-        // --- Matrix Rain Effect ---
-        function initMatrix() {
-            const canvas = document.getElementById('matrix-canvas');
-            const ctx = canvas.getContext('2d');
+  window.setMatrix = on => {
+    matrixOn = on;
+    if(on && !matrixTimer) matrixTimer = setInterval(draw, 45);
+    if(!on && matrixTimer){ clearInterval(matrixTimer); matrixTimer = null;
+      ctx.fillStyle = '#000'; ctx.fillRect(0,0,canvas.width,canvas.height); }
+  };
+  setMatrix(!REDUCED);
+}
 
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+/* -------------------- boot sequence -------------------- */
+const BOOT_LINES = [
+  'TANVEER-OS v2.0 — BIOS 07/2026',
+  'CPU: NEURAL-CORE @ 4.5GHz ............... OK',
+  'MEMORY: 64GB DETECTED ................... OK',
+  'DISPLAY: PHOSPHOR-9000 [CRT MODE] ....... OK',
+  '',
+  'Mounting /dev/projects .................. OK',
+  'Loading FAISS vector index .............. OK',
+  'Warming RAG pipeline .................... OK',
+  'Attaching WebSocket event bus ........... OK',
+  'Running skill_diagnostic --quick ........ PASS',
+  'Loading user profile: TANVEER AHMAD ..... OK',
+  ''
+];
+const BANNER =
+'▀█▀ ▄▀█ █▄ █ █ █ █▀▀ █▀▀ █▀█\n' +
+' █  █▀█ █ ▀█ ▀▄▀ ██▄ ██▄ █▀▄';
 
-            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリBgD10';
-            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            const nums = '0123456789';
-            const alphabet = katakana + latin + nums;
+let bootSkipped = false, bootFinished = false;
 
-            const fontSize = 16;
-            const columns = canvas.width/fontSize;
+function skipBoot(){ bootSkipped = true; }
 
-            const rainDrops = [];
+async function typeLine(el, text){
+  const d = document.createElement('div');
+  el.appendChild(d);
+  if(text === ''){ d.innerHTML = '&nbsp;'; return; }
+  for(let i = 0; i < text.length; i++){
+    if(bootSkipped){ d.textContent = text; return; }
+    d.textContent += text[i];
+    await new Promise(r => setTimeout(r, 7));
+  }
+}
 
-            for( let x = 0; x < columns; x++ ) {
-                rainDrops[x] = 1;
-            }
+async function runBoot(){
+  const box = $('#boot-text');
+  if(REDUCED) bootSkipped = true;
 
-            const draw = () => {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+  for(const ln of BOOT_LINES){
+    if(bootSkipped) break;
+    await typeLine(box, ln);
+    await new Promise(r => setTimeout(r, 55));
+  }
+  if(bootSkipped){
+    box.innerHTML = BOOT_LINES.map(l => `<div>${l === '' ? '&nbsp;' : esc(l)}</div>`).join('');
+  }
 
-                ctx.fillStyle = '#0F0';
-                ctx.font = fontSize + 'px monospace';
+  const ban = document.createElement('pre');
+  ban.id = 'boot-banner'; ban.textContent = BANNER;
+  box.appendChild(ban);
+  const role = document.createElement('div');
+  role.innerHTML = '<span class="amb">AI-FOCUSED SOFTWARE ENGINEER</span><br>Starting SYSTEM UI ...';
+  box.appendChild(role);
 
-                for(let i = 0; i < rainDrops.length; i++)
-                {
-                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                    ctx.fillText(text, i*fontSize, rainDrops[i]*fontSize);
+  await new Promise(r => setTimeout(r, bootSkipped ? 250 : 700));
+  finishBoot();
+}
 
-                    if(rainDrops[i]*fontSize > canvas.height && Math.random() > 0.975){
-                        rainDrops[i] = 0;
-                    }
-                    rainDrops[i]++;
-                }
-            };
+function finishBoot(){
+  if(bootFinished) return;
+  bootFinished = true;
+  const bs = $('#boot-screen');
+  bs.style.transition = 'opacity .8s'; bs.style.opacity = '0';
+  setTimeout(() => {
+    bs.style.display = 'none';
+    $('#desktop').classList.add('on');
+    $('#taskbar').classList.add('on');
+    openWindow('about');
+  }, REDUCED ? 50 : 820);
+}
 
-            setInterval(draw, 30);
-            
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            });
-        }
+/* -------------------- copy helpers -------------------- */
+async function copyText(text, btn){
+  let ok = false;
+  try{ await navigator.clipboard.writeText(text); ok = true; }
+  catch(e){
+    const t = document.createElement('textarea');
+    t.value = text; document.body.appendChild(t); t.select();
+    try{ ok = document.execCommand('copy'); }catch(_){}
+    t.remove();
+  }
+  if(btn){
+    const old = btn.textContent;
+    btn.textContent = ok ? 'COPIED!' : 'COPY FAILED';
+    btn.classList.add('solid');
+    setTimeout(() => { btn.textContent = old; btn.classList.remove('solid'); }, 1800);
+  }
+}
 
-        // NEW: Copy to clipboard function for phone number
-        function copyPhoneNumber() {
-            const phoneNumber = "+91 7017666204";
-            const btn = document.getElementById('phone-btn');
-            
-            // Create temporary textarea to copy text
-            const textarea = document.createElement('textarea');
-            textarea.value = phoneNumber;
-            document.body.appendChild(textarea);
-            textarea.select();
-            
-            try {
-                document.execCommand('copy');
-                // Visual feedback
-                const originalText = btn.innerText;
-                btn.innerText = "COPIED!";
-                btn.style.backgroundColor = "var(--phosphor-main)";
-                btn.style.color = "black";
-                
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.backgroundColor = "transparent";
-                    btn.style.color = "var(--phosphor-main)";
-                }, 2000);
-            } catch (err) {
-                console.error('Failed to copy', err);
-            }
-            
-            document.body.removeChild(textarea);
-        }
-    </script>
+/* -------------------- github feed -------------------- */
+const REPOS_FALLBACK = [
+  {name:'Plant_Disease_detection_ML', lang:'Python', stars:0, url:'https://github.com/Tanveer2905/Plant_Disease_detection_ML',
+   desc:'Detects and classifies plant disease from leaf images using an ensemble of ML/DL models, with segmentation to highlight the affected region.'},
+  {name:'Locago', lang:'CSS', stars:0, url:'https://github.com/Tanveer2905/Locago',
+   desc:'Real-time GPS emergency vehicle tracking and dispatch — built for the District Administration of Tehri Garhwal.'},
+  {name:'AI_Speech_Evaluator', lang:'Python', stars:0, url:'https://github.com/Tanveer2905/AI_Speech_Evaluator',
+   desc:'AI-based speech evaluation from text or text files — analyzes pronunciation, confidence and fluency.'},
+  {name:'UniversityUnited', lang:'HTML', stars:1, url:'https://github.com/Tanveer2905/UniversityUnited',
+   desc:'Web platform for students across universities to communicate, share resources and collaborate on academic projects.'},
+  {name:'NexaVerse', lang:'CSS', stars:0, url:'https://github.com/Tanveer2905/NexaVerse',
+   desc:'Questionnaire-driven recommendations matching learners to the most suitable teacher for a topic.'},
+  {name:'TRACECHAIN', lang:null, stars:0, url:'https://github.com/Tanveer2905/TRACECHAIN',
+   desc:'Blockchain-secured APIs for carbon emission data tracking and alert automation.'}
+];
+
+let reposLoaded = false;
+async function loadRepos(){
+  if(reposLoaded) return;
+  reposLoaded = true;
+  const status = $('#repo-status');
+  try{
+    const r = await fetch('https://api.github.com/users/Tanveer2905/repos?per_page=100&sort=updated');
+    if(!r.ok) throw new Error(r.status);
+    let d = await r.json();
+    d = d.filter(x => !x.fork)
+         .sort((a,b) => (b.stargazers_count - a.stargazers_count) ||
+                        (new Date(b.pushed_at) - new Date(a.pushed_at)))
+         .slice(0, 12)
+         .map(x => ({name:x.name, lang:x.language, stars:x.stargazers_count,
+                     url:x.html_url, desc:x.description}));
+    renderRepos(d, true);
+  }catch(e){
+    renderRepos(REPOS_FALLBACK, false);
+  }
+  function renderRepos(list, live){
+    status.innerHTML = `&gt; ${list.length} repositories mounted ` +
+      (live ? '<span class="amb">[LIVE FEED]</span>' : '<span class="amb">[CACHED INDEX]</span>');
+    $('#repo-list').innerHTML = list.map(r => `
+      <div class="repo">
+        <div class="repo-head">
+          <a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>
+          <span class="repo-meta">${r.lang ? esc(r.lang) + ' · ' : ''}★ ${r.stars}</span>
+        </div>
+        ${r.desc ? `<p>${esc(r.desc)}</p>` : ''}
+      </div>`).join('');
+  }
+}
+
+/* -------------------- terminal -------------------- */
+const T = { out:null, input:null, hist:[], hi:-1 };
+
+function tprint(html, cls){
+  const d = document.createElement('div');
+  if(cls) d.className = cls;
+  d.innerHTML = html;
+  T.out.appendChild(d);
+  T.out.scrollTop = T.out.scrollHeight;
+}
+
+const CMDS = {
+  help(){ tprint(
+`available commands:
+  <span class="t-amb">about</span>       who is this guy
+  <span class="t-amb">skills</span>      print the skill tree
+  <span class="t-amb">projects</span>    list flagship projects
+  <span class="t-amb">career</span>      work experience
+  <span class="t-amb">contact</span>     how to reach me
+  <span class="t-amb">github</span>      open repository index
+  <span class="t-amb">resume</span>      download the PDF
+  <span class="t-amb">open</span> &lt;app&gt;  open a window (about/skills/projects/career/github/contact)
+  <span class="t-amb">neofetch</span>    system summary
+  <span class="t-amb">matrix</span>      toggle the rain
+  <span class="t-amb">clear</span>       clear the screen`); },
+
+  about(){ tprint(
+`Tanveer Ahmad — AI-focused Software Engineer.
+Builds production-grade systems combining ML, real-time
+architectures and backend engineering. Strong in RAG systems,
+computer vision and scalable API design. B.Tech CSE,
+Uttarakhand Technical University (2021–2025).
+Google Cybersecurity Professional Certificate (2024).`); },
+
+  whoami(){ tprint('tanveer — AI-focused Software Engineer'); },
+
+  skills(){ tprint(
+`AI/ML ....... RAG · LLMs · Computer Vision · Deep Learning · Ensembles · NLP
+languages ... Python · JavaScript · Kotlin · SQL
+frameworks .. Flask · Django · FastAPI · TensorFlow · Keras · Scikit-learn
+backend ..... REST APIs · WebSockets · event-driven architecture · DB design
+tools ....... FAISS · SQLite · OpenCV · Git · Postman`); },
+
+  projects(){ tprint(
+`AETHERMATH  multimodal RAG math mentor — parser→solver→verifier→explainer
+LOCAGO      govt-deployed emergency dispatch — ~80–90% faster initiation
+SCAN        7-model plant disease ensemble — ~96.1% accuracy, U-Net XAI
+type <span class="t-amb">open projects</span> for details`); },
+
+  career(){ tprint(
+`2024–25  Business Analyst Intern — ColoredCow (Agmarknet 2.0)
+2024     Software Developer Intern — District Admin, Tehri Garhwal
+2023     DevRel Lead — HackWithIndia
+type <span class="t-amb">open career</span> for details`); },
+
+  contact(){ tprint(
+`email ..... <a href="mailto:ahmadtanveer.2905@gmail.com">ahmadtanveer.2905@gmail.com</a>
+phone ..... +91 7017666204
+github .... <a href="https://github.com/Tanveer2905" target="_blank" rel="noopener">github.com/Tanveer2905</a>
+linkedin .. <a href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener">/in/tanveer-ahmad-6a5468251</a>`); },
+
+  github(){ openWindow('github'); tprint('mounting GITHUB.EXE ...'); },
+  resume(){ window.open('Tanveer_Ahmad_Resume.pdf','_blank'); tprint('fetching Tanveer_Ahmad_Resume.pdf ...'); },
+
+  open(args){
+    const id = (args[0] || '').toLowerCase();
+    if(wins[id]){ openWindow(id); tprint(`opening ${esc(TITLES[id])} ...`); }
+    else tprint(`open: unknown app "${esc(args[0] || '')}" — try about, skills, projects, career, github, contact`, 't-err');
+  },
+
+  neofetch(){ tprint(
+`<span class="t-amb">      ▄▄▄▄▄▄
+     ██ TA ██</span>    tanveer@portfolio
+<span class="t-amb">      ▀▀▀▀▀▀</span>     -----------------
+OS ......... TANVEER-OS v2.0 (CRT build)
+Role ....... AI-focused Software Engineer
+Stack ...... Python · Flask · FastAPI · TensorFlow
+Retrieval .. FAISS + embeddings [loaded]
+Uptime ..... coding since 2021 (B.Tech CSE)
+Repos ...... 16 public @ github.com/Tanveer2905`); },
+
+  matrix(){ setMatrix(!matrixOn); tprint(`matrix rain: ${matrixOn ? 'ON' : 'OFF'}`); },
+  clear(){ T.out.innerHTML = ''; },
+  date(){ tprint(esc(new Date().toString())); },
+  echo(args){ tprint(esc(args.join(' '))); },
+
+  sudo(args){
+    if(args.join(' ').toLowerCase().includes('hire')){
+      tprint('<span class="t-amb">ACCESS GRANTED — excellent decision.</span> opening MAIL_CLIENT ...');
+      setTimeout(() => openWindow('contact'), 600);
+    } else {
+      tprint('user is not in the sudoers file. This incident will be reported.', 't-err');
+    }
+  }
+};
+CMDS.ls = CMDS.projects;
+CMDS.experience = CMDS.career;
+
+function runCmd(raw){
+  const line = raw.trim();
+  tprint(`<span class="t-prompt">tanveer@portfolio:~$</span> ${esc(line)}`);
+  if(!line) return;
+  T.hist.push(line); T.hi = T.hist.length;
+  const [cmd, ...args] = line.split(/\s+/);
+  const fn = CMDS[cmd.toLowerCase()];
+  if(fn) fn(args);
+  else tprint(`command not found: ${esc(cmd)} — type <span class="t-amb">help</span>`, 't-err');
+}
+
+function initTerminal(){
+  T.out = $('#term-out');
+  T.input = $('#term-input');
+  tprint('TANVEER-OS terminal — type <span class="t-amb">help</span> to begin');
+
+  $('#term-form').addEventListener('submit', e => {
+    e.preventDefault();
+    runCmd(T.input.value);
+    T.input.value = '';
+  });
+
+  T.input.addEventListener('keydown', e => {
+    if(e.key === 'ArrowUp'){
+      e.preventDefault();
+      if(T.hi > 0){ T.hi--; T.input.value = T.hist[T.hi] || ''; }
+    } else if(e.key === 'ArrowDown'){
+      e.preventDefault();
+      if(T.hi < T.hist.length){ T.hi++; T.input.value = T.hist[T.hi] || ''; }
+    } else if(e.key === 'l' && e.ctrlKey){
+      e.preventDefault(); CMDS.clear();
+    }
+  });
+
+  $('#window-terminal .win-body').addEventListener('click', e => {
+    if(!e.target.closest('a')) T.input.focus();
+  });
+}
+
+/* -------------------- global wiring -------------------- */
+function init(){
+  /* index windows + drag */
+  $$('.window').forEach(w => {
+    wins[w.id.replace('window-','')] = w;
+    makeDraggable(w);
+  });
+
+  /* icon + button openers: dbl-click on desktop, tap on touch, Enter anywhere */
+  const coarse = matchMedia('(pointer: coarse)').matches;
+  $$('[data-open]').forEach(elm => {
+    const id = elm.dataset.open;
+    if(elm.classList.contains('icon') && !coarse){
+      elm.addEventListener('dblclick', () => openWindow(id));
+      elm.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openWindow(id); }
+      });
+    } else {
+      elm.addEventListener('click', () => openWindow(id));
+    }
+  });
+
+  /* close / minimize buttons */
+  $$('[data-close]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); closeWindow(b.dataset.close);
+  }));
+  $$('[data-min]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); minimizeWindow(b.dataset.min);
+  }));
+
+  /* copy buttons */
+  $$('[data-copy]').forEach(b => b.addEventListener('click', () => copyText(b.dataset.copy, b)));
+
+  /* start menu */
+  $('#start-btn').addEventListener('click', e => { e.stopPropagation(); toggleStartMenu(); });
+  document.addEventListener('click', e => {
+    if(startOpen && !e.target.closest('#start-menu') && !e.target.closest('#start-btn')) closeStartMenu();
+  });
+
+  /* ESC closes the front-most window */
+  document.addEventListener('keydown', e => {
+    if(e.key !== 'Escape') return;
+    if(startOpen){ closeStartMenu(); return; }
+    let top = null, tz = -1;
+    for(const id of openSet){
+      const w = wins[id];
+      if(w.classList.contains('open') && +w.style.zIndex > tz){ tz = +w.style.zIndex; top = id; }
+    }
+    if(top) closeWindow(top);
+  });
+
+  /* boot skip triggers */
+  $('#boot-screen').addEventListener('click', skipBoot);
+  document.addEventListener('keydown', () => { if(!bootFinished) skipBoot(); }, { once:false });
+
+  initTerminal();
+  initMatrix();
+  startClock();
+  runBoot();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
