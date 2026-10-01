@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tanveer Ahmad — AI-focused Software Engineer</title>
-<meta name="description" content="Portfolio of Tanveer Ahmad — AI-focused software engineer building RAG systems, computer vision and real-time backends. Creator of LOCAGO (deployed with Govt. of Uttarakhand), AetherMath and SCAN.">
+<title>Tanveer Ahmad — Full-stack & AI Engineer</title>
+<meta name="description" content="Portfolio of Tanveer Ahmad, full-stack and AI engineer. Case files on LOCAGO (emergency dispatch for the District Administration, Tehri Garhwal), HireMind (offline resume ranking), AetherMath and SCAN.">
 <meta name="author" content="Tanveer Ahmad">
-<meta property="og:title" content="Tanveer Ahmad — AI-focused Software Engineer">
-<meta property="og:description" content="RAG systems · Computer Vision · Real-time backends. Boot the OS to explore projects, experience and code.">
+<meta property="og:title" content="Tanveer Ahmad — Full-stack & AI Engineer">
+<meta property="og:description" content="Emergency dispatch, offline resume ranking, multi-agent RAG and computer vision. Boot the OS to open the case files.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/96965755?v=4">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23030503'/%3E%3Ctext x='10' y='46' font-family='monospace' font-size='38' fill='%2333ff33'%3ET%3E%3C/text%3E%3C/svg%3E">
@@ -16,13 +16,13 @@
 <link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   TANVEER-OS v2.0 — phosphor CRT design tokens
+   TANVEER-OS v2.1 — phosphor CRT design tokens
    ============================================================ */
 :root{
-  --phos:        #33ff33;              /* primary green phosphor   */
-  --phos-dim:    #1d9e1d;              /* secondary green          */
-  --phos-faint:  rgba(51,255,51,.08);  /* fills / hovers           */
-  --amber:       #ffb000;              /* metric / highlight color */
+  --phos:        #33ff33;
+  --phos-dim:    #1d9e1d;
+  --phos-faint:  rgba(51,255,51,.08);
+  --amber:       #ffb000;
   --bg:          #030503;
   --panel:       #000;
   --glow:        0 0 6px rgba(51,255,51,.55);
@@ -234,6 +234,45 @@ button{ font-family:inherit; }
 .status{ font-family:var(--font-crt); font-size:.95rem; color:var(--amber); white-space:nowrap; }
 .card ul{ margin:8px 0 4px; padding-left:18px; }
 .card li{ margin:2px 0; }
+.card.lab{ border-style:dashed; padding:10px 12px; margin-bottom:10px; }
+.card.lab h3{ font-size:1.2rem; margin-bottom:4px; }
+.card.lab p{ margin:4px 0; }
+.lab-h{
+  font-family:var(--font-crt); font-size:1.1rem; color:var(--phos-dim);
+  margin:22px 0 10px;
+}
+
+/* case files */
+.case-sec{
+  font-family:var(--font-crt); font-size:1.25rem; letter-spacing:.5px;
+  text-shadow:var(--glow); margin:20px 0 6px;
+}
+.case-sec:first-of-type{ margin-top:6px; }
+.case-lede{ font-size:14px; }
+pre.arch{
+  font-family:var(--font-body); font-size:12px; line-height:1.4;
+  color:var(--phos); background:rgba(51,255,51,.035);
+  border:1px dashed var(--phos-dim);
+  padding:10px 12px; margin:6px 0 4px;
+  overflow-x:auto; white-space:pre;
+}
+.decisions{ margin:4px 0; padding-left:18px; }
+.decisions li{ margin:6px 0; }
+.decisions b{ color:var(--amber); font-weight:500; }
+.tbl-wrap{ overflow-x:auto; margin:6px 0; }
+table.res{ width:100%; border-collapse:collapse; font-size:12.5px; }
+table.res th, table.res td{
+  text-align:left; padding:3px 10px 3px 0;
+  border-bottom:1px dashed rgba(29,158,29,.45);
+}
+table.res th{ color:var(--phos-dim); font-weight:500; }
+table.res td.num, table.res th.num{ text-align:right; font-variant-numeric:tabular-nums; }
+table.res tr.hl td{ color:var(--amber); }
+.est{
+  display:inline-block; color:var(--amber); border:1px solid var(--amber);
+  padding:0 5px; font-size:11px; margin-right:6px; line-height:1.5;
+}
+.footnote{ font-size:11.5px; color:var(--phos-dim); margin:4px 0 0; }
 
 /* career timeline */
 .tl{ border-left:2px dashed var(--phos-dim); margin-left:6px; padding:0 0 20px 16px; position:relative; }
@@ -320,9 +359,10 @@ button{ font-family:inherit; }
 
 /* ---------- start menu ---------- */
 #start-menu{
-  position:fixed; left:8px; bottom:52px; width:270px; z-index:11500;
+  position:fixed; left:8px; bottom:52px; width:280px; z-index:11500;
   display:none; background:#000; border:2px solid var(--phos);
   box-shadow:0 0 20px rgba(51,255,51,.25);
+  max-height:calc(100vh - 70px); overflow-y:auto;
 }
 #start-menu.on{ display:block; }
 #start-menu .sm-head{
@@ -337,6 +377,7 @@ button{ font-family:inherit; }
   font-family:var(--font-crt); font-size:1.12rem; cursor:pointer;
   text-decoration:none;
 }
+#start-menu .sm-item.sub{ padding-left:30px; font-size:1.02rem; }
 #start-menu .sm-item:hover, #start-menu .sm-item:focus-visible{ background:var(--phos); color:#000; }
 #start-menu .sm-div{ border-top:1px dashed var(--phos-dim); margin:5px 0; }
 
@@ -348,6 +389,7 @@ button{ font-family:inherit; }
   #desk-hint{ display:none !important; }
   .window{ max-height:72vh; }
   .skill-grid{ grid-template-columns:1fr; }
+  pre.arch{ font-size:11px; }
 }
 
 /* ---------- reduced motion ---------- */
@@ -361,7 +403,6 @@ button{ font-family:inherit; }
 </head>
 <body>
 
-<!-- CRT overlay effects -->
 <div id="crt-overlay" aria-hidden="true"></div>
 <div id="scanline" aria-hidden="true"></div>
 
@@ -371,7 +412,6 @@ button{ font-family:inherit; }
   <div id="boot-skip">PRESS ANY KEY OR TAP TO SKIP <span class="blink">_</span></div>
 </div>
 
-<!-- Matrix rain -->
 <canvas id="matrix-canvas" aria-hidden="true"></canvas>
 
 <!-- ==================== DESKTOP ==================== -->
@@ -406,7 +446,7 @@ button{ font-family:inherit; }
     <span>GITHUB.EXE</span>
   </button>
 
-  <a class="icon" href="Tanveer_Ahmad_Resume.pdf" target="_blank" rel="noopener" style="text-decoration:none">
+  <a class="icon" href="Tanveer_Ahmad_Resume.pdf" target="_blank" rel="noopener" style="text-decoration:none" data-track="resume">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M12 18v-6"></path><path d="m9 15 3 3 3-3"></path></svg>
     <span>RESUME.PDF</span>
   </a>
@@ -416,18 +456,18 @@ button{ font-family:inherit; }
     <span>MAIL_ME</span>
   </button>
 
-  <a class="icon" href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener" style="text-decoration:none">
+  <a class="icon" href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener" style="text-decoration:none" data-track="linkedin">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
     <span>LINKEDIN.EXE</span>
   </a>
 </div>
 
-<div id="desk-hint">DOUBLE-CLICK AN ICON · ESC CLOSES WINDOWS<br>TRY TERMINAL.EXE AND TYPE "HELP"</div>
+<div id="desk-hint">CLICK AN ICON TO OPEN · ESC CLOSES WINDOWS<br>TRY TERMINAL.EXE AND TYPE "HELP"</div>
 
 <!-- ==================== WINDOWS ==================== -->
 
 <!-- ABOUT -->
-<div class="window" id="window-about" role="dialog" aria-label="About Tanveer Ahmad" style="--w:480px; top:9%; left:7%;">
+<div class="window" id="window-about" role="dialog" aria-label="About Tanveer Ahmad" style="--w:500px; top:9%; left:7%;">
   <div class="title-bar" data-win="about">
     <span>SYSTEM_INFO</span>
     <span class="tb-btns">
@@ -441,36 +481,36 @@ button{ font-family:inherit; }
            onerror="this.outerHTML='&lt;div class=&quot;avatar&quot; style=&quot;display:flex;align-items:center;justify-content:center;font-family:var(--font-crt);font-size:2rem&quot;&gt;TA&lt;/div&gt;'">
       <div>
         <h2>TANVEER AHMAD</h2>
-        <p>AI-focused Software Engineer</p>
+        <p>Full-stack &amp; AI Engineer</p>
       </div>
     </div>
 
     <p class="cmdline dim">&gt; cat profile.txt</p>
-    <p>AI-focused software engineer building production-grade systems that combine
-    machine learning, real-time architectures and backend engineering. Strong in
-    <span class="amb">RAG systems</span>, <span class="amb">computer vision</span> and
-    scalable API design — with real-world exposure through a
-    <span class="amb">government deployment</span> and cross-functional product work.</p>
+    <p>I build software end to end: Python backends (Flask, FastAPI, Django), React
+    front ends, and the ML in between — retrieval pipelines, local LLMs and computer vision.</p>
+    <p>My work so far ranges from a <span class="amb">nearest-unit emergency dispatch system</span>
+    built for the District Administration of Tehri Garhwal, to an
+    <span class="amb">offline resume-ranking copilot</span> that never sends candidate data to the cloud.</p>
 
     <h3 class="crt-h">&gt; EDUCATION</h3>
-    <p>B.Tech — Computer Science Engineering<br>
-    <span class="dim">Uttarakhand Technical University · 2021–2025</span></p>
+    <p>B.Tech, Computer Science &amp; Engineering<br>
+    <span class="dim">Uttarakhand Technical University, 2021–2025</span></p>
 
     <h3 class="crt-h">&gt; CERTIFICATION</h3>
-    <p>Google Cybersecurity Professional Certificate <span class="dim">· May 2024</span><br>
-    <span class="dim">SIEM analysis, network security, threat detection &amp; incident response;
+    <p>Google Cybersecurity Professional Certificate <span class="dim">(May 2024)</span><br>
+    <span class="dim">SIEM analysis, network security, threat detection and incident response;
     Python and SQL for security automation.</span></p>
 
-    <p class="statline">STATUS: <b>16</b> public repos · <b>1</b> govt-deployed system ·
-    <b>3</b> flagship AI/backend projects</p>
+    <p class="statline">STATUS: <b class="repo-count">16+</b> public repos · <b>4</b> case files ·
+    <b>1</b> live product</p>
 
-    <a class="btn" href="Tanveer_Ahmad_Resume.pdf" target="_blank" rel="noopener">DOWNLOAD RESUME.PDF</a>
-    <button class="btn" data-open="contact">OPEN MAIL_ME</button>
+    <a class="btn" href="Tanveer_Ahmad_Resume.pdf" target="_blank" rel="noopener" data-track="resume">DOWNLOAD RESUME.PDF</a>
+    <button class="btn" data-open="projects">OPEN CASE FILES</button>
   </div>
 </div>
 
 <!-- SKILLS -->
-<div class="window" id="window-skills" role="dialog" aria-label="Skills" style="--w:580px; top:13%; left:26%;">
+<div class="window" id="window-skills" role="dialog" aria-label="Skills" style="--w:600px; top:12%; left:26%;">
   <div class="title-bar" data-win="skills">
     <span>SKILLS.SYS</span>
     <span class="tb-btns">
@@ -485,11 +525,30 @@ button{ font-family:inherit; }
       <div>
         <h3 class="ai">AI / ML</h3>
         <ul>
-          <li><span class="ok">[ok]</span>RAG &amp; LLM systems</li>
-          <li><span class="ok">[ok]</span>Computer Vision</li>
-          <li><span class="ok">[ok]</span>Deep Learning</li>
-          <li><span class="ok">[ok]</span>Ensemble Learning</li>
-          <li><span class="ok">[ok]</span>NLP</li>
+          <li><span class="ok">[ok]</span>RAG and LLM systems</li>
+          <li><span class="ok">[ok]</span>Local LLMs (llama.cpp)</li>
+          <li><span class="ok">[ok]</span>Embeddings and vector search</li>
+          <li><span class="ok">[ok]</span>Computer vision</li>
+          <li><span class="ok">[ok]</span>Deep learning, ensembles</li>
+          <li><span class="ok">[ok]</span>NLP (spaCy)</li>
+        </ul>
+      </div>
+      <div>
+        <h3>BACKEND</h3>
+        <ul>
+          <li><span class="ok">[ok]</span>Flask · FastAPI · Django</li>
+          <li><span class="ok">[ok]</span>REST APIs, JWT auth</li>
+          <li><span class="ok">[ok]</span>WebSockets, WebRTC</li>
+          <li><span class="ok">[ok]</span>PostgreSQL · SQLite</li>
+          <li><span class="ok">[ok]</span>Database design</li>
+        </ul>
+      </div>
+      <div>
+        <h3>FRONTEND</h3>
+        <ul>
+          <li><span class="ok">[ok]</span>React · Next.js</li>
+          <li><span class="ok">[ok]</span>JavaScript, HTML, CSS</li>
+          <li><span class="ok">[ok]</span>Android (Kotlin)</li>
         </ul>
       </div>
       <div>
@@ -501,26 +560,13 @@ button{ font-family:inherit; }
           <li><span class="ok">[ok]</span>SQL</li>
         </ul>
       </div>
-      <div>
-        <h3>FRAMEWORKS</h3>
-        <ul>
-          <li><span class="ok">[ok]</span>Flask · Django · FastAPI</li>
-          <li><span class="ok">[ok]</span>TensorFlow · Keras</li>
-          <li><span class="ok">[ok]</span>Scikit-learn</li>
-        </ul>
-      </div>
-      <div>
-        <h3>BACKEND</h3>
-        <ul>
-          <li><span class="ok">[ok]</span>REST APIs</li>
-          <li><span class="ok">[ok]</span>WebSockets</li>
-          <li><span class="ok">[ok]</span>Event-driven architecture</li>
-          <li><span class="ok">[ok]</span>Database design</li>
-        </ul>
+      <div class="skill-full">
+        <h3 class="ai">ML LIBRARIES</h3>
+        <p style="margin:4px 0 0">TensorFlow · Keras · scikit-learn · XGBoost · LightGBM · OpenCV · sentence-transformers · FAISS</p>
       </div>
       <div class="skill-full">
         <h3>TOOLS &amp; PLATFORMS</h3>
-        <p style="margin:4px 0 0">FAISS · SQLite · OpenCV · Git · Postman · Android (Kotlin) · Web applications</p>
+        <p style="margin:4px 0 0">Git · Docker · Postman · Twilio · LiveKit · Cloudflare · Linux / Termux</p>
       </div>
     </div>
     <p class="cmdline dim" style="margin-top:12px">&gt; diagnostic complete <span class="blink">_</span></p>
@@ -541,64 +587,375 @@ button{ font-family:inherit; }
 
     <div class="card">
       <div class="card-head">
-        <h3>AETHERMATH</h3>
-        <span class="status">[ RAG · MULTI-AGENT ]</span>
-      </div>
-      <div>
-        <span class="tag ai">RAG</span><span class="tag ai">LLMs</span><span class="tag">FAISS</span><span class="tag">SQLite</span><span class="tag">Multimodal</span>
-      </div>
-      <p>Self-improving multimodal AI math mentor that solves problems from
-      <b>text, image and audio</b> input.</p>
-      <ul>
-        <li>Structured agent pipeline — <span class="amb">parser → solver → verifier → explainer</span> — to reduce hallucinations</li>
-        <li>Self-learning memory: SQLite + similarity search with human-in-the-loop feedback</li>
-        <li>FAISS + embeddings for context-aware retrieval</li>
-      </ul>
-      <a class="btn" href="mailto:ahmadtanveer.2905@gmail.com?subject=AetherMath%20demo">REQUEST DEMO</a>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
         <h3>LOCAGO</h3>
-        <span class="status">[ DEPLOYED · GOVT. OF UTTARAKHAND ]</span>
+        <span class="status">[ BUILT FOR DISTRICT ADMIN, TEHRI GARHWAL ]</span>
       </div>
       <div>
-        <span class="tag">Flask</span><span class="tag">PostgreSQL</span><span class="tag">WebSockets</span><span class="tag">Twilio</span>
+        <span class="tag">Flask</span><span class="tag">PostgreSQL</span><span class="tag">OSRM</span><span class="tag">Twilio</span>
       </div>
-      <p>Real-time GPS emergency dispatch system for police, fire and ambulance
-      services, built for the District Administration of Tehri Garhwal.</p>
+      <p>GPS fleet tracking and emergency dispatch for police, fire and ambulance
+      vehicles. Sends the nearest unit to a caller and texts the driver their location.</p>
       <ul>
-        <li>One-click emergency interface cut request initiation time by <span class="amb">~80–90%</span></li>
-        <li>Nearest-vehicle allocation algorithm improved response time by <span class="amb">~30–50%</span></li>
-        <li>WebSocket live tracking with <span class="amb">sub-second latency</span>; live location / ETA / contact exchange improved coordination by <span class="amb">~40%+</span></li>
+        <li>Ranks units by <span class="amb">road distance and ETA</span>, not straight-line distance, because in the hills those disagree a lot</li>
+        <li>Merges two GPS vendors' inconsistent tracker APIs into one fleet view with geofence alerts</li>
+        <li><span class="est">EST.</span>~80–90% faster to raise a request, ~30–50% faster response</li>
       </ul>
+      <button class="btn solid" data-open="locago">OPEN CASE FILE</button>
       <a class="btn" href="https://github.com/Tanveer2905/Locago" target="_blank" rel="noopener">VIEW SOURCE</a>
     </div>
 
     <div class="card">
       <div class="card-head">
-        <h3>SCAN</h3>
-        <span class="status">[ ~96.1% ACCURACY ]</span>
+        <h3>AETHERMATH</h3>
+        <span class="status">[ MULTI-AGENT RAG ]</span>
       </div>
       <div>
-        <span class="tag ai">Ensemble ×7</span><span class="tag">TensorFlow</span><span class="tag">OpenCV</span><span class="tag">U-Net</span><span class="tag">Flask API</span><span class="tag">Android</span>
+        <span class="tag ai">RAG</span><span class="tag ai">LLMs</span><span class="tag">FAISS</span><span class="tag">SQLite</span><span class="tag">Multimodal</span>
       </div>
-      <p>AI-based plant disease detection system trained on <span class="amb">~54K images</span>
-      with optimized preprocessing and augmentation pipelines.</p>
+      <p>Math mentor that takes a problem as text, a photo or audio, and checks its
+      own work before explaining it.</p>
       <ul>
-        <li>7-model ensemble reaching <span class="amb">~96.1%</span> classification accuracy</li>
-        <li>U-Net segmentation highlights infected regions — explainable AI output</li>
-        <li>Flask inference API deployed cross-platform: Web + Android (Kotlin)</li>
+        <li>Agent pipeline: <span class="amb">parser → solver → verifier → explainer</span>, to cut hallucinated answers</li>
+        <li>Self-learning memory (SQLite + similarity search) improved through human feedback</li>
       </ul>
+      <button class="btn solid" data-open="aethermath">OPEN CASE FILE</button>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>HIREMIND</h3>
+        <span class="status">[ OPEN SOURCE · FULLY OFFLINE ]</span>
+      </div>
+      <div>
+        <span class="tag ai">Local LLM</span><span class="tag ai">BGE + FAISS</span><span class="tag">FastAPI</span><span class="tag">spaCy</span><span class="tag">LightGBM</span><span class="tag">Docker</span>
+      </div>
+      <p>Hiring copilot that ranks resumes against a job description on your own
+      machine. No API keys, and candidate data never leaves the laptop.</p>
+      <ul>
+        <li>Five-factor scoring: semantic similarity, skill match, experience, recency, keywords</li>
+        <li>Optional <span class="amb">LLaMA 3 8B</span> reranking with an algorithmic fallback when there's no GPU</li>
+        <li>Learns from recruiter shortlist/reject decisions with LightGBM</li>
+      </ul>
+      <button class="btn solid" data-open="hiremind">OPEN CASE FILE</button>
+      <a class="btn" href="https://github.com/Tanveer2905/HireMind" target="_blank" rel="noopener">VIEW SOURCE</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>SCAN</h3>
+        <span class="status">[ 96.1% ENSEMBLE ACCURACY ]</span>
+      </div>
+      <div>
+        <span class="tag ai">Ensemble ×7</span><span class="tag">TensorFlow</span><span class="tag">U-Net</span><span class="tag">OpenCV</span><span class="tag">Flask API</span><span class="tag">Android</span>
+      </div>
+      <p>Plant disease detection from a leaf photo, trained on <span class="amb">54K images</span>
+      across 38 classes. Shows where on the leaf the disease is, not just its name.</p>
+      <ul>
+        <li>Majority vote across 4 deep and 3 classical models</li>
+        <li>U-Net segmentation mask (Dice 0.872) so users can check the model looked at the right spot</li>
+        <li>One Flask API serves both the web app and a Kotlin Android app</li>
+      </ul>
+      <button class="btn solid" data-open="scan">OPEN CASE FILE</button>
       <a class="btn" href="https://github.com/Tanveer2905/Plant_Disease_detection_ML" target="_blank" rel="noopener">VIEW SOURCE</a>
     </div>
 
-    <p class="dim" style="font-size:12px">3 featured entries · run <b>GITHUB.EXE</b> for the full repository index</p>
+    <p class="lab-h">&gt; ls /home/tanveer/lab</p>
+
+    <div class="card lab">
+      <div class="card-head">
+        <h3>MASSDEBAITER</h3>
+        <span class="status">[ LIVE ]</span>
+      </div>
+      <p>Live debate platform: WebRTC rooms on LiveKit, real-time speech-to-text,
+      motion classification, and AI-assisted judging that weighs argument quality
+      alongside how the audience's vote shifts.</p>
+      <div><span class="tag">WebRTC</span><span class="tag">LiveKit</span><span class="tag ai">STT</span><span class="tag ai">LLMs</span><span class="tag">Cloudflare</span></div>
+      <a class="btn" href="https://massdebaiter.com" target="_blank" rel="noopener" data-track="massdebaiter">VISIT MASSDEBAITER.COM</a>
+    </div>
+
+    <div class="card lab">
+      <div class="card-head">
+        <h3>ANDROID CLUSTER</h3>
+        <span class="status">[ IN PROGRESS ]</span>
+      </div>
+      <p>Turning old Android phones into a small offline compute cluster under Termux,
+      with a pull-based task queue and a mini HDFS-style chunk store. Zero cost, no cloud.</p>
+      <div><span class="tag">Termux</span><span class="tag">Python</span><span class="tag">Distributed systems</span></div>
+    </div>
+
+    <p class="dim" style="font-size:12px">4 case files and 2 lab entries · run <b>GITHUB.EXE</b> for every repository</p>
+  </div>
+</div>
+
+<!-- CASE FILE: LOCAGO -->
+<div class="window" id="window-locago" role="dialog" aria-label="Case file: LOCAGO" style="--w:700px; top:5%; left:22%;">
+  <div class="title-bar" data-win="locago">
+    <span>CASE_FILE: LOCAGO</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="locago" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="locago" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <p class="cmdline dim">&gt; cat cases/locago.md</p>
+    <p class="status">[ INTERNSHIP, DISTRICT ADMINISTRATION, TEHRI GARHWAL · JUN–AUG 2024 ]</p>
+
+    <h3 class="case-sec">&gt; the problem</h3>
+    <p class="case-lede">The district's police, fire and ambulance vehicles already carried GPS
+    trackers, but from more than one vendor, each with its own API and response format.
+    The job was to put one fleet view on top of those feeds, and get the nearest unit
+    moving toward a caller as fast as possible.</p>
+
+    <h3 class="case-sec">&gt; how it works</h3>
+<pre class="arch">caller ── service type + GPS ──┐
+                               v
+tracker A ──┐         ┌─────────────────┐
+            ├─ norm ─>│    Flask app    │──> PostgreSQL
+tracker B ──┘         │  dispatch core  │    fleet + GPS history
+                      └────────┬────────┘
+                               │ candidate units
+                               v
+                     OSRM: road km + ETA
+                               │ nearest unit
+                               v
+                     Twilio SMS ──> driver</pre>
+    <p class="footnote">The driver's SMS carries the caller's coordinates, a map link and their phone number.</p>
+
+    <h3 class="case-sec">&gt; key decisions</h3>
+    <ul class="decisions">
+      <li><b>Road distance, not straight line.</b> In Tehri the roads follow the valleys. A unit
+      2 km away across a ridge can be 30 minutes further than one 6 km down the road, so
+      candidates are ranked by OSRM driving distance and ETA. Slower to compute, but the
+      assignments are actually right.</li>
+      <li><b>Accept both tracker formats.</b> Instead of asking vendors to standardise, ingestion
+      detects which schema a feed uses and pulls the fields it needs from either.</li>
+      <li><b>Derive stops at query time.</b> A gap of 120 seconds or more between readings counts
+      as a stop. The write path stays simple, and the threshold can change without
+      reprocessing history.</li>
+    </ul>
+
+    <h3 class="case-sec">&gt; impact</h3>
+    <ul class="decisions">
+      <li><span class="est">EST.</span>~80–90% faster to raise an emergency request with the one-click flow</li>
+      <li><span class="est">EST.</span>~30–50% faster response from nearest-unit routing</li>
+    </ul>
+    <p class="footnote">These figures are estimates, not controlled measurements.</p>
+
+    <h3 class="case-sec">&gt; what I'd do next</h3>
+    <ul class="decisions">
+      <li>Push live positions over WebSockets instead of polling</li>
+      <li>Fetch trackers concurrently and prefilter by bounding box before routing, so dispatch stays fast as the fleet grows</li>
+      <li>Add authentication with separate dispatcher and admin roles</li>
+    </ul>
+
+    <p style="margin-top:14px">
+      <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">SQLAlchemy</span><span class="tag">PostgreSQL</span><span class="tag">OSRM</span><span class="tag">Twilio</span>
+    </p>
+    <a class="btn solid" href="https://github.com/Tanveer2905/Locago" target="_blank" rel="noopener">VIEW SOURCE</a>
+    <button class="btn" data-open="projects">BACK TO PROJECTS</button>
+  </div>
+</div>
+
+<!-- CASE FILE: AETHERMATH -->
+<div class="window" id="window-aethermath" role="dialog" aria-label="Case file: AetherMath" style="--w:680px; top:7%; left:24%;">
+  <div class="title-bar" data-win="aethermath">
+    <span>CASE_FILE: AETHERMATH</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="aethermath" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="aethermath" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <p class="cmdline dim">&gt; cat cases/aethermath.md</p>
+    <p class="status">[ SOURCE PRIVATE · WALKTHROUGH ON REQUEST ]</p>
+
+    <h3 class="case-sec">&gt; the problem</h3>
+    <p class="case-lede">LLMs can sound completely confident about a math problem and still get it
+    wrong. For a student, a wrong answer explained well is worse than no answer.
+    AetherMath splits the work across specialised agents so a solution gets checked
+    before anyone sees it.</p>
+
+    <h3 class="case-sec">&gt; how it works</h3>
+<pre class="arch">text  /  image  /  audio
+  │
+  ├─ parser ····· turns the input into a clean problem
+  ├─ solver ····· works it, with retrieved context (FAISS)
+  ├─ verifier ··· checks the solution before it ships
+  ├─ explainer ·· writes the step-by-step walkthrough
+  │
+  └─> memory ···· SQLite + similarity search,
+                  improved by human feedback</pre>
+
+    <h3 class="case-sec">&gt; key decisions</h3>
+    <ul class="decisions">
+      <li><b>One job per agent.</b> Parsing, solving, verifying and explaining are separate
+      steps, so a mistake in one can be caught by the next instead of flowing straight to the user.</li>
+      <li><b>Meet students where they are.</b> A problem can come in as typed text, a photo
+      of a worksheet, or spoken audio.</li>
+      <li><b>A memory that gets better.</b> Solved problems are stored with similarity search,
+      and human-in-the-loop feedback shapes what the system learns from.</li>
+    </ul>
+
+    <p style="margin-top:14px">
+      <span class="tag ai">RAG</span><span class="tag ai">Multi-agent</span><span class="tag ai">LLMs</span><span class="tag">FAISS</span><span class="tag">SQLite</span><span class="tag">Python</span>
+    </p>
+    <a class="btn solid" href="mailto:ahmadtanveer.2905@gmail.com?subject=AetherMath%20walkthrough" data-track="aethermath-walkthrough">ASK FOR A WALKTHROUGH</a>
+    <button class="btn" data-open="projects">BACK TO PROJECTS</button>
+  </div>
+</div>
+
+<!-- CASE FILE: HIREMIND -->
+<div class="window" id="window-hiremind" role="dialog" aria-label="Case file: HireMind" style="--w:700px; top:6%; left:20%;">
+  <div class="title-bar" data-win="hiremind">
+    <span>CASE_FILE: HIREMIND</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="hiremind" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="hiremind" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <p class="cmdline dim">&gt; cat cases/hiremind.md</p>
+    <p class="status">[ OPEN SOURCE · RUNS FULLY OFFLINE ]</p>
+
+    <h3 class="case-sec">&gt; the problem</h3>
+    <p class="case-lede">Screening a pile of resumes against a job description is slow, and most AI
+    tools for it want candidate data uploaded to someone else's cloud. HireMind does the
+    ranking on your own machine: no API keys, nothing leaves the laptop.</p>
+
+    <h3 class="case-sec">&gt; how it works</h3>
+<pre class="arch">PDF resumes + job description
+  │
+  ├─ parse ······· pdfplumber + spaCy, ~500-skill taxonomy
+  ├─ embed ······· BGE-base 768-d vectors ──> FAISS
+  ├─ score ······· 5-factor weighted + must-have filters
+  ├─ rerank ······ LLaMA 3 8B, local, optional
+  ├─ personalize · LightGBM on recruiter decisions
+  │
+  └─> ranked shortlist ──> CSV / Excel</pre>
+
+    <h3 class="case-sec">&gt; the score</h3>
+    <div class="tbl-wrap">
+      <table class="res">
+        <thead><tr><th>Factor</th><th class="num">Weight</th><th>How</th></tr></thead>
+        <tbody>
+          <tr><td>Semantic similarity</td><td class="num">35%</td><td>Cosine similarity, resume vs. JD embeddings</td></tr>
+          <tr><td>Skill match</td><td class="num">25%</td><td>Taxonomy-aware, with aliases</td></tr>
+          <tr><td>Experience relevance</td><td class="num">20%</td><td>Sigmoid centred on the JD's requirement</td></tr>
+          <tr><td>Recency</td><td class="num">10%</td><td>Exponential decay, recent work weighs more</td></tr>
+          <tr><td>Keyword precision</td><td class="num">10%</td><td>Coverage of the JD's top 30 keywords</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="case-sec">&gt; key decisions</h3>
+    <ul class="decisions">
+      <li><b>Local-first.</b> The LLM runs in-process (Q4-quantized LLaMA 3 8B via llama-cpp-python),
+      so candidate data never touches a third-party API.</li>
+      <li><b>The LLM is optional.</b> Without enough RAM or a GPU it falls back to an algorithmic
+      evaluator that still writes candidate-specific analysis. Nothing breaks.</li>
+      <li><b>Learn the recruiter's taste.</b> After 20+ shortlist/reject decisions, a LightGBM
+      model adjusts scores by up to ±10%, and it persists across sessions.</li>
+      <li><b>Cache every stage.</b> Parsed resumes, embeddings and LLM evaluations are saved to
+      disk, so re-runs on the same pile are fast.</li>
+    </ul>
+
+    <h3 class="case-sec">&gt; also in the box</h3>
+    <ul class="decisions">
+      <li>Chat search: "who has both React and Docker?" becomes structured filters</li>
+      <li>Per-candidate interview questions</li>
+      <li>Multi-tenant FastAPI backend with JWT auth and per-user FAISS indexes</li>
+      <li>Self-contained Docker image with models baked in</li>
+    </ul>
+
+    <p style="margin-top:14px">
+      <span class="tag ai">LLaMA 3</span><span class="tag ai">BGE</span><span class="tag">FAISS</span><span class="tag">spaCy</span><span class="tag">LightGBM</span><span class="tag">Flask</span><span class="tag">FastAPI</span><span class="tag">Docker</span>
+    </p>
+    <a class="btn solid" href="https://github.com/Tanveer2905/HireMind" target="_blank" rel="noopener">VIEW SOURCE</a>
+    <button class="btn" data-open="projects">BACK TO PROJECTS</button>
+  </div>
+</div>
+
+<!-- CASE FILE: SCAN -->
+<div class="window" id="window-scan" role="dialog" aria-label="Case file: SCAN" style="--w:700px; top:8%; left:26%;">
+  <div class="title-bar" data-win="scan">
+    <span>CASE_FILE: SCAN</span>
+    <span class="tb-btns">
+      <button class="tb-btn" data-min="scan" aria-label="Minimize">_</button>
+      <button class="tb-btn" data-close="scan" aria-label="Close">X</button>
+    </span>
+  </div>
+  <div class="win-body">
+    <p class="cmdline dim">&gt; cat cases/scan.md</p>
+    <p class="status">[ B.TECH MAJOR PROJECT · MAY 2025 ]</p>
+
+    <h3 class="case-sec">&gt; the problem</h3>
+    <p class="case-lede">A photo of a sick leaf should tell you what the disease is, and also show
+    where the model was looking, so a wrong answer is easy to spot. The people using a
+    tool like this usually can't verify a diagnosis on their own.</p>
+
+    <h3 class="case-sec">&gt; how it works</h3>
+<pre class="arch">leaf photo (web upload / Android camera)
+  │
+Flask /predict_api
+  ├─ classify ··· 128×128 input
+  │     CNN, ResNet50, MobileNetV2, VGG16
+  │     SVM, XGBoost, Random Forest (on CNN features)
+  │     └─> majority vote of 7
+  ├─ segment ···· rembg background removal ──> U-Net mask
+  ├─ histogram ·· RGB distribution (OpenCV)
+  │
+  └─> JSON: each model's label, final label, mask, histogram</pre>
+
+    <h3 class="case-sec">&gt; results</h3>
+    <p class="footnote" style="margin-bottom:4px">PlantVillage: 54,000 images, 38 classes, 14 crops. 70/15/15 split.</p>
+    <div class="tbl-wrap">
+      <table class="res">
+        <thead><tr><th>Model</th><th class="num">Accuracy</th><th class="num">F1</th></tr></thead>
+        <tbody>
+          <tr><td>CNN (custom)</td><td class="num">98.0%</td><td class="num">93%</td></tr>
+          <tr><td>MobileNetV2</td><td class="num">97.0%</td><td class="num">94%</td></tr>
+          <tr><td>SVM</td><td class="num">97.0%</td><td class="num">94%</td></tr>
+          <tr><td>ResNet50</td><td class="num">95.8%</td><td class="num">95.5%</td></tr>
+          <tr><td>VGG16</td><td class="num">95.0%</td><td class="num">95%</td></tr>
+          <tr><td>XGBoost</td><td class="num">93.0%</td><td class="num">88%</td></tr>
+          <tr><td>Random Forest</td><td class="num">88.0%</td><td class="num">85%</td></tr>
+          <tr class="hl"><td>Majority vote ensemble</td><td class="num">96.1%</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Segmentation: <span class="amb">Dice 0.872</span>, <span class="amb">IoU 0.812</span>.</p>
+    <p class="footnote">The ensemble doesn't beat the best single model on raw accuracy. What it buys is
+    stability on look-alike classes such as tomato early vs. late blight, where one model's
+    blind spot shouldn't become the final answer.</p>
+
+    <h3 class="case-sec">&gt; key decisions</h3>
+    <ul class="decisions">
+      <li><b>Seven models, one vote.</b> CNNs, tree ensembles and a margin classifier fail in
+      different ways, so an error has to be shared by four of seven to reach the user.</li>
+      <li><b>Classical models on learned features.</b> SVM, XGBoost and Random Forest train on CNN
+      features instead of hand-made ones. SVM reaches 97% this way.</li>
+      <li><b>Segmentation as explainability.</b> A confident label with a mask over healthy
+      tissue is a signal to distrust the prediction.</li>
+      <li><b>Remove the background first.</b> Field photos include soil, hands and other leaves,
+      so rembg isolates the target leaf before the U-Net runs.</li>
+    </ul>
+
+    <h3 class="case-sec">&gt; what I'd do next</h3>
+    <ul class="decisions">
+      <li>On-device inference with TensorFlow Lite or ONNX for offline use in the field</li>
+      <li>Evaluate on real field photos; PlantVillage is shot under controlled lighting</li>
+    </ul>
+
+    <p style="margin-top:14px">
+      <span class="tag ai">Ensemble ×7</span><span class="tag">TensorFlow</span><span class="tag">Keras</span><span class="tag">U-Net</span><span class="tag">OpenCV</span><span class="tag">Flask</span><span class="tag">Kotlin</span>
+    </p>
+    <a class="btn solid" href="https://github.com/Tanveer2905/Plant_Disease_detection_ML" target="_blank" rel="noopener">VIEW SOURCE</a>
+    <button class="btn" data-open="projects">BACK TO PROJECTS</button>
   </div>
 </div>
 
 <!-- CAREER -->
-<div class="window" id="window-career" role="dialog" aria-label="Experience" style="--w:620px; top:17%; left:13%;">
+<div class="window" id="window-career" role="dialog" aria-label="Experience" style="--w:620px; top:15%; left:13%;">
   <div class="title-bar" data-win="career">
     <span>CAREER.LOG</span>
     <span class="tb-btns">
@@ -609,40 +966,51 @@ button{ font-family:inherit; }
   <div class="win-body">
     <p class="cmdline dim">&gt; tail -f career.log</p>
 
+    <!-- FREELANCE: fill in and uncomment
+    <div class="tl">
+      <h3>Freelance Software Developer</h3>
+      <p class="where">Self-employed · Mar 2025 – Present</p>
+      <ul>
+        <li>What you built, for what kind of client</li>
+        <li>Stack used and the result</li>
+      </ul>
+    </div>
+    -->
+
     <div class="tl">
       <h3>Business Analyst Intern</h3>
       <p class="where">ColoredCow · Dec 2024 – Feb 2025</p>
       <ul>
-        <li>Contributed to the <span class="amb">Agmarknet 2.0</span> project — requirement gathering, analysis and documentation</li>
-        <li>Created structured documentation bridging business stakeholders and engineering teams</li>
+        <li>Worked on the <span class="amb">Agmarknet 2.0</span> project: requirement gathering, analysis and documentation</li>
+        <li>Wrote structured documentation bridging business stakeholders and engineering teams</li>
         <li>Translated business needs into actionable technical requirements</li>
       </ul>
     </div>
 
     <div class="tl">
       <h3>Software Developer Intern</h3>
-      <p class="where">District Administration, Tehri Garhwal · Jun 2024 – Aug 2024</p>
+      <p class="where">District Administration, Tehri Garhwal (Govt. of Uttarakhand) · Jun 2024 – Aug 2024</p>
       <ul>
-        <li>Built a real-time GPS vehicle tracking system (<span class="amb">Flask + PostgreSQL</span>) for live monitoring of government vehicles</li>
-        <li>Integrated Twilio SMS alerts, improving emergency response efficiency by <span class="amb">30%</span></li>
-        <li>Designed event-based backend workflows and optimized APIs for low-latency tracking</li>
+        <li>Built <span class="amb">LOCAGO</span>, a GPS fleet tracking and emergency dispatch system (Flask + PostgreSQL) for police, fire and ambulance vehicles</li>
+        <li>Nearest-unit dispatch by road distance using OSRM, with an automatic Twilio SMS to the assigned driver</li>
+        <li>Unified two vendors' inconsistent GPS tracker APIs into a single fleet view with geofence monitoring</li>
       </ul>
+      <button class="btn" data-open="locago" style="margin-top:8px">OPEN CASE FILE</button>
     </div>
 
     <div class="tl">
-      <h3>DevRel Lead</h3>
-      <p class="where">HackWithIndia · Jan 2023 – Dec 2023</p>
+      <h3>Software Developer (Part-time)</h3>
+      <p class="where">Devnovate · Jan 2023 – Dec 2023</p>
+      <!-- TODO: add 2–3 bullets on what you built at Devnovate -->
       <ul>
-        <li>Organized backend-focused hackathons and coding events across institutions</li>
-        <li>Mentored teams on API development, database integration and CI/CD workflows</li>
-        <li>Facilitated developer onboarding and technical sessions</li>
+        <li>Part-time software development role alongside B.Tech coursework</li>
       </ul>
     </div>
   </div>
 </div>
 
 <!-- TERMINAL -->
-<div class="window" id="window-terminal" role="dialog" aria-label="Interactive terminal" style="--w:640px; top:22%; left:32%;">
+<div class="window" id="window-terminal" role="dialog" aria-label="Interactive terminal" style="--w:660px; top:20%; left:30%;">
   <div class="title-bar" data-win="terminal">
     <span>TERMINAL.EXE</span>
     <span class="tb-btns">
@@ -672,7 +1040,7 @@ button{ font-family:inherit; }
     <p class="cmdline dim" id="repo-status">&gt; mount github.com/Tanveer2905 ...</p>
     <div id="repo-list"></div>
     <p style="margin-top:12px">
-      <a class="btn solid" href="https://github.com/Tanveer2905" target="_blank" rel="noopener">OPEN FULL PROFILE →</a>
+      <a class="btn solid" href="https://github.com/Tanveer2905" target="_blank" rel="noopener" data-track="github-profile">OPEN FULL PROFILE</a>
     </p>
   </div>
 </div>
@@ -688,17 +1056,16 @@ button{ font-family:inherit; }
   </div>
   <div class="win-body">
     <p class="mail-field"><span>TO:</span> ahmadtanveer.2905@gmail.com</p>
-    <p class="mail-field"><span>SUBJECT:</span> Let's build something</p>
-    <div class="mail-box">Open for software engineering, Python and AI/ML roles —
-    full-time, internship or freelance. Average response time: fast.</div>
+    <p class="mail-field"><span>SUBJECT:</span> Hello Tanveer</p>
+    <div class="mail-box">Questions about one of the case files, or something you'd like to
+    talk through? Email works best, and LinkedIn is fine too.</div>
 
-    <a class="btn solid" href="mailto:ahmadtanveer.2905@gmail.com?subject=Hello%20Tanveer" style="display:block;text-align:center;margin-bottom:10px">SEND MESSAGE</a>
+    <a class="btn solid" href="mailto:ahmadtanveer.2905@gmail.com?subject=Hello%20Tanveer" style="display:block;text-align:center;margin-bottom:10px" data-track="mailto">WRITE AN EMAIL</a>
 
     <div class="contact-btns">
       <button class="btn" data-copy="ahmadtanveer.2905@gmail.com">COPY EMAIL</button>
-      <button class="btn" data-copy="+91 7017666204">+91 7017666204</button>
-      <a class="btn" href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener">LINKEDIN</a>
-      <a class="btn" href="https://github.com/Tanveer2905" target="_blank" rel="noopener">GITHUB</a>
+      <a class="btn" href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener" data-track="linkedin">LINKEDIN</a>
+      <a class="btn" href="https://github.com/Tanveer2905" target="_blank" rel="noopener" data-track="github-profile">GITHUB</a>
     </div>
   </div>
 </div>
@@ -710,29 +1077,40 @@ button{ font-family:inherit; }
   <div id="clock">00:00:00</div>
 </div>
 
-<!-- Start menu -->
 <nav id="start-menu" aria-label="System menu">
   <div class="sm-head">SYSTEM MENU</div>
   <ul>
     <li><button class="sm-item" data-open="about">System Info</button></li>
-    <li><button class="sm-item" data-open="skills">Run Diagnostics — Skills</button></li>
-    <li><button class="sm-item" data-open="projects">Browse Files — Projects</button></li>
-    <li><button class="sm-item" data-open="career">Read Log — Experience</button></li>
+    <li><button class="sm-item" data-open="projects">Browse Files: Projects</button></li>
+    <li><button class="sm-item sub" data-open="locago">Case file: LOCAGO</button></li>
+    <li><button class="sm-item sub" data-open="aethermath">Case file: AetherMath</button></li>
+    <li><button class="sm-item sub" data-open="hiremind">Case file: HireMind</button></li>
+    <li><button class="sm-item sub" data-open="scan">Case file: SCAN</button></li>
+    <li><button class="sm-item" data-open="skills">Run Diagnostics: Skills</button></li>
+    <li><button class="sm-item" data-open="career">Read Log: Experience</button></li>
     <li><button class="sm-item" data-open="terminal">Terminal</button></li>
     <li><button class="sm-item" data-open="github">GitHub Repositories</button></li>
     <li class="sm-div" aria-hidden="true"></li>
-    <li><a class="sm-item" href="Tanveer_Ahmad_Resume.pdf" target="_blank" rel="noopener">Download Résumé ↗</a></li>
-    <li><a class="sm-item" href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+    <li><a class="sm-item" href="Tanveer_Ahmad_Resume.pdf" target="_blank" rel="noopener" data-track="resume">Download Résumé ↗</a></li>
+    <li><a class="sm-item" href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener" data-track="linkedin">LinkedIn ↗</a></li>
     <li class="sm-div" aria-hidden="true"></li>
-    <li><button class="sm-item" data-open="contact">Shut Down — Contact</button></li>
+    <li><button class="sm-item" data-open="contact">Shut Down: Contact</button></li>
   </ul>
 </nav>
 
 <script>
 /* ============================================================
-   TANVEER-OS v2.0 — window manager, boot, terminal, github feed
+   TANVEER-OS v2.1 — window manager, boot, terminal, github feed
    ============================================================ */
 'use strict';
+
+/* ---- config: the only things you should need to edit ---- */
+const CONFIG = {
+  github: 'Tanveer2905',
+  /* Free, cookie-free analytics: sign up at goatcounter.com, pick a code
+     (e.g. "tanveer"), and paste it here. Leave '' to disable. */
+  goatcounter: ''
+};
 
 const $  = (q, r) => (r || document).querySelector(q);
 const $$ = (q, r) => [...(r || document).querySelectorAll(q)];
@@ -746,8 +1124,28 @@ const esc = s => String(s)
 const TITLES = {
   about:'SYSTEM_INFO', skills:'SKILLS.SYS', projects:'PROJECTS_DIR',
   career:'CAREER.LOG', terminal:'TERMINAL.EXE', github:'GITHUB.EXE',
-  contact:'MAIL_CLIENT'
+  contact:'MAIL_CLIENT',
+  locago:'CASE: LOCAGO', aethermath:'CASE: AETHERMATH',
+  hiremind:'CASE: HIREMIND', scan:'CASE: SCAN'
 };
+const CASES = ['locago','aethermath','hiremind','scan'];
+
+/* -------------------- analytics (GoatCounter) -------------------- */
+function initAnalytics(){
+  if(!CONFIG.goatcounter) return;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://gc.zgo.at/count.js';
+  s.setAttribute('data-goatcounter', `https://${CONFIG.goatcounter}.goatcounter.com/count`);
+  document.head.appendChild(s);
+}
+function track(name){
+  try{
+    if(window.goatcounter && typeof window.goatcounter.count === 'function'){
+      window.goatcounter.count({ path:name, title:name, event:true });
+    }
+  }catch(_){}
+}
 
 /* -------------------- window manager -------------------- */
 const wins = {};
@@ -763,13 +1161,15 @@ function focusWin(id){
 
 function openWindow(id){
   const w = wins[id]; if(!w) return;
-  if(!openSet.has(id)){ openSet.add(id); addTab(id); }
+  const firstOpen = !openSet.has(id);
+  if(firstOpen){ openSet.add(id); addTab(id); track('window/' + id); }
   if(isMobile()){ w.style.top = '6vh'; w.style.left = '3vw'; }
   w.style.display = 'flex';
   requestAnimationFrame(() => requestAnimationFrame(() => w.classList.add('open')));
   $(`.task-tab[data-win="${id}"]`)?.classList.remove('min');
   focusWin(id);
   closeStartMenu();
+  if(firstOpen) $('.win-body', w).scrollTop = 0;
   if(id === 'terminal') setTimeout(() => $('#term-input').focus(), 200);
   if(id === 'github') loadRepos();
 }
@@ -805,7 +1205,6 @@ function addTab(id){
   $('#task-tabs').appendChild(b);
 }
 
-/* dragging (pointer events cover mouse + touch) */
 function makeDraggable(w){
   const id  = w.id.replace('window-','');
   const bar = $('.title-bar', w);
@@ -896,18 +1295,19 @@ function initMatrix(){
 }
 
 /* -------------------- boot sequence -------------------- */
+const dots = (label, state) => (label + ' ').padEnd(41, '.') + ' ' + state;
 const BOOT_LINES = [
-  'TANVEER-OS v2.0 — BIOS 07/2026',
-  'CPU: NEURAL-CORE @ 4.5GHz ............... OK',
-  'MEMORY: 64GB DETECTED ................... OK',
-  'DISPLAY: PHOSPHOR-9000 [CRT MODE] ....... OK',
+  'TANVEER-OS v2.1 — BIOS 10/2026',
+  dots('CPU: NEURAL-CORE @ 4.5GHz', 'OK'),
+  dots('MEMORY: 64GB DETECTED', 'OK'),
+  dots('DISPLAY: PHOSPHOR-9000 [CRT MODE]', 'OK'),
   '',
-  'Mounting /dev/projects .................. OK',
-  'Loading FAISS vector index .............. OK',
-  'Warming RAG pipeline .................... OK',
-  'Attaching WebSocket event bus ........... OK',
-  'Running skill_diagnostic --quick ........ PASS',
-  'Loading user profile: TANVEER AHMAD ..... OK',
+  dots('Mounting /dev/projects', 'OK'),
+  dots('Indexing resumes: BGE + FAISS', 'OK'),
+  dots('Routing dispatch via OSRM', 'OK'),
+  dots('Polling 7 leaf models for a vote', 'OK'),
+  dots('Running skill_diagnostic --quick', 'PASS'),
+  dots('Loading user profile: TANVEER AHMAD', 'OK'),
   ''
 ];
 const BANNER =
@@ -915,7 +1315,6 @@ const BANNER =
 ' █  █▀█ █ ▀█ ▀▄▀ ██▄ ██▄ █▀▄';
 
 let bootSkipped = false, bootFinished = false;
-
 function skipBoot(){ bootSkipped = true; }
 
 async function typeLine(el, text){
@@ -946,7 +1345,7 @@ async function runBoot(){
   ban.id = 'boot-banner'; ban.textContent = BANNER;
   box.appendChild(ban);
   const role = document.createElement('div');
-  role.innerHTML = '<span class="amb">AI-FOCUSED SOFTWARE ENGINEER</span><br>Starting SYSTEM UI ...';
+  role.innerHTML = '<span class="amb">FULL-STACK &amp; AI ENGINEER</span><br>Starting SYSTEM UI ...';
   box.appendChild(role);
 
   await new Promise(r => setTimeout(r, bootSkipped ? 250 : 700));
@@ -966,7 +1365,7 @@ function finishBoot(){
   }, REDUCED ? 50 : 820);
 }
 
-/* -------------------- copy helpers -------------------- */
+/* -------------------- copy helper -------------------- */
 async function copyText(text, btn){
   let ok = false;
   try{ await navigator.clipboard.writeText(text); ok = true; }
@@ -978,35 +1377,79 @@ async function copyText(text, btn){
   }
   if(btn){
     const old = btn.textContent;
-    btn.textContent = ok ? 'COPIED!' : 'COPY FAILED';
+    btn.textContent = ok ? 'COPIED' : 'COPY FAILED';
     btn.classList.add('solid');
     setTimeout(() => { btn.textContent = old; btn.classList.remove('solid'); }, 1800);
   }
+  if(ok) track('copy-email');
 }
 
-/* -------------------- github feed -------------------- */
+/* -------------------- github feed (cached 1h) -------------------- */
+const GH_CACHE_KEY = 'tanveer-os-gh';
+const GH_TTL = 60 * 60 * 1000;
+let repoCount = '16+';
+
 const REPOS_FALLBACK = [
+  {name:'HireMind', lang:'Python', stars:0, url:'https://github.com/Tanveer2905/HireMind',
+   desc:'Local-first hiring copilot: ranks resumes against a job description with BGE + FAISS, optional local LLaMA 3 reranking, and feedback learning.'},
+  {name:'Locago', lang:'Python', stars:0, url:'https://github.com/Tanveer2905/Locago',
+   desc:'GPS fleet tracking and nearest-unit emergency dispatch, built for the District Administration of Tehri Garhwal.'},
   {name:'Plant_Disease_detection_ML', lang:'Python', stars:0, url:'https://github.com/Tanveer2905/Plant_Disease_detection_ML',
-   desc:'Detects and classifies plant disease from leaf images using an ensemble of ML/DL models, with segmentation to highlight the affected region.'},
-  {name:'Locago', lang:'CSS', stars:0, url:'https://github.com/Tanveer2905/Locago',
-   desc:'Real-time GPS emergency vehicle tracking and dispatch — built for the District Administration of Tehri Garhwal.'},
+   desc:'SCAN: seven-model plant disease ensemble with U-Net segmentation, served to web and Android.'},
   {name:'AI_Speech_Evaluator', lang:'Python', stars:0, url:'https://github.com/Tanveer2905/AI_Speech_Evaluator',
-   desc:'AI-based speech evaluation from text or text files — analyzes pronunciation, confidence and fluency.'},
+   desc:'AI-based speech evaluation from text or text files: pronunciation, confidence and fluency.'},
   {name:'UniversityUnited', lang:'HTML', stars:1, url:'https://github.com/Tanveer2905/UniversityUnited',
-   desc:'Web platform for students across universities to communicate, share resources and collaborate on academic projects.'},
+   desc:'Platform for students across universities to communicate, share resources and collaborate.'},
   {name:'NexaVerse', lang:'CSS', stars:0, url:'https://github.com/Tanveer2905/NexaVerse',
    desc:'Questionnaire-driven recommendations matching learners to the most suitable teacher for a topic.'},
   {name:'TRACECHAIN', lang:null, stars:0, url:'https://github.com/Tanveer2905/TRACECHAIN',
    desc:'Blockchain-secured APIs for carbon emission data tracking and alert automation.'}
 ];
 
+function readGhCache(){
+  try{
+    const c = JSON.parse(localStorage.getItem(GH_CACHE_KEY) || 'null');
+    if(c && Date.now() - c.t < GH_TTL) return c;
+  }catch(_){}
+  return null;
+}
+function writeGhCache(patch){
+  try{
+    const c = JSON.parse(localStorage.getItem(GH_CACHE_KEY) || 'null') || {};
+    localStorage.setItem(GH_CACHE_KEY, JSON.stringify({ ...c, ...patch, t: Date.now() }));
+  }catch(_){}
+}
+
+function setRepoCount(n){
+  repoCount = String(n);
+  $$('.repo-count').forEach(el => el.textContent = repoCount);
+}
+
+async function loadRepoCount(){
+  const c = readGhCache();
+  if(c && c.count != null){ setRepoCount(c.count); return; }
+  try{
+    const r = await fetch(`https://api.github.com/users/${CONFIG.github}`);
+    if(!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    if(typeof d.public_repos === 'number'){
+      setRepoCount(d.public_repos);
+      writeGhCache({ count: d.public_repos });
+    }
+  }catch(_){ /* keep fallback */ }
+}
+
 let reposLoaded = false;
 async function loadRepos(){
   if(reposLoaded) return;
   reposLoaded = true;
   const status = $('#repo-status');
+
+  const cached = readGhCache();
+  if(cached && cached.repos){ render(cached.repos, true); return; }
+
   try{
-    const r = await fetch('https://api.github.com/users/Tanveer2905/repos?per_page=100&sort=updated');
+    const r = await fetch(`https://api.github.com/users/${CONFIG.github}/repos?per_page=100&sort=updated`);
     if(!r.ok) throw new Error(r.status);
     let d = await r.json();
     d = d.filter(x => !x.fork)
@@ -1015,18 +1458,20 @@ async function loadRepos(){
          .slice(0, 12)
          .map(x => ({name:x.name, lang:x.language, stars:x.stargazers_count,
                      url:x.html_url, desc:x.description}));
-    renderRepos(d, true);
+    writeGhCache({ repos: d });
+    render(d, true);
   }catch(e){
-    renderRepos(REPOS_FALLBACK, false);
+    render(REPOS_FALLBACK, false);
   }
-  function renderRepos(list, live){
+
+  function render(list, live){
     status.innerHTML = `&gt; ${list.length} repositories mounted ` +
       (live ? '<span class="amb">[LIVE FEED]</span>' : '<span class="amb">[CACHED INDEX]</span>');
     $('#repo-list').innerHTML = list.map(r => `
       <div class="repo">
         <div class="repo-head">
           <a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>
-          <span class="repo-meta">${r.lang ? esc(r.lang) + ' · ' : ''}★ ${r.stars}</span>
+          <span class="repo-meta">${r.lang ? esc(r.lang) + ' · ' : ''}★ ${Number(r.stars) || 0}</span>
         </div>
         ${r.desc ? `<p>${esc(r.desc)}</p>` : ''}
       </div>`).join('');
@@ -1047,72 +1492,83 @@ function tprint(html, cls){
 const CMDS = {
   help(){ tprint(
 `available commands:
-  <span class="t-amb">about</span>       who is this guy
-  <span class="t-amb">skills</span>      print the skill tree
-  <span class="t-amb">projects</span>    list flagship projects
-  <span class="t-amb">career</span>      work experience
-  <span class="t-amb">contact</span>     how to reach me
-  <span class="t-amb">github</span>      open repository index
-  <span class="t-amb">resume</span>      download the PDF
-  <span class="t-amb">open</span> &lt;app&gt;  open a window (about/skills/projects/career/github/contact)
-  <span class="t-amb">neofetch</span>    system summary
-  <span class="t-amb">matrix</span>      toggle the rain
-  <span class="t-amb">clear</span>       clear the screen`); },
+  <span class="t-amb">about</span>         who is this guy
+  <span class="t-amb">skills</span>        print the skill tree
+  <span class="t-amb">projects</span>      list the case files
+  <span class="t-amb">case</span> &lt;name&gt;   open a case file (locago, aethermath, hiremind, scan)
+  <span class="t-amb">lab</span>           side builds and experiments
+  <span class="t-amb">career</span>        work experience
+  <span class="t-amb">contact</span>       how to reach me
+  <span class="t-amb">github</span>        open repository index
+  <span class="t-amb">resume</span>        download the PDF
+  <span class="t-amb">open</span> &lt;app&gt;    open any window
+  <span class="t-amb">neofetch</span>      system summary
+  <span class="t-amb">matrix</span>        toggle the rain
+  <span class="t-amb">clear</span>         clear the screen`); },
 
   about(){ tprint(
-`Tanveer Ahmad — AI-focused Software Engineer.
-Builds production-grade systems combining ML, real-time
-architectures and backend engineering. Strong in RAG systems,
-computer vision and scalable API design. B.Tech CSE,
-Uttarakhand Technical University (2021–2025).
+`Tanveer Ahmad, full-stack and AI engineer.
+Python backends (Flask, FastAPI, Django), React front ends,
+and the ML in between: retrieval, local LLMs, computer vision.
+B.Tech CSE, Uttarakhand Technical University (2021–2025).
 Google Cybersecurity Professional Certificate (2024).`); },
 
-  whoami(){ tprint('tanveer — AI-focused Software Engineer'); },
+  whoami(){ tprint('tanveer: full-stack and AI engineer'); },
 
   skills(){ tprint(
-`AI/ML ....... RAG · LLMs · Computer Vision · Deep Learning · Ensembles · NLP
-languages ... Python · JavaScript · Kotlin · SQL
-frameworks .. Flask · Django · FastAPI · TensorFlow · Keras · Scikit-learn
-backend ..... REST APIs · WebSockets · event-driven architecture · DB design
-tools ....... FAISS · SQLite · OpenCV · Git · Postman`); },
+`AI/ML ....... RAG · local LLMs · embeddings · CV · ensembles · NLP
+backend ..... Flask · FastAPI · Django · REST · JWT · PostgreSQL · SQLite
+frontend .... React · Next.js · JavaScript · Android (Kotlin)
+ml libs ..... TensorFlow · Keras · scikit-learn · XGBoost · LightGBM · OpenCV
+tools ....... FAISS · Docker · Git · Twilio · LiveKit · Cloudflare`); },
 
   projects(){ tprint(
-`AETHERMATH  multimodal RAG math mentor — parser→solver→verifier→explainer
-LOCAGO      govt-deployed emergency dispatch — ~80–90% faster initiation
-SCAN        7-model plant disease ensemble — ~96.1% accuracy, U-Net XAI
-type <span class="t-amb">open projects</span> for details`); },
+`LOCAGO      nearest-unit emergency dispatch, ranked by road distance
+AETHERMATH  multi-agent math tutor: parser → solver → verifier → explainer
+HIREMIND    offline resume ranking: BGE + FAISS + optional local LLaMA 3
+SCAN        plant disease detection: 7-model vote, 96.1%, U-Net masks
+type <span class="t-amb">case &lt;name&gt;</span> to open one, or <span class="t-amb">lab</span> for side builds`); },
+
+  lab(){ tprint(
+`MASSDEBAITER     live debates with STT and AI judging  <a href="https://massdebaiter.com" target="_blank" rel="noopener">massdebaiter.com</a>
+ANDROID CLUSTER  old phones as an offline compute cluster (in progress)`); },
+
+  case(args){
+    const id = (args[0] || '').toLowerCase();
+    if(CASES.includes(id)){ openWindow(id); tprint(`opening case file: ${esc(id)} ...`); }
+    else tprint(`case: pick one of ${CASES.join(', ')}`, 't-err');
+  },
 
   career(){ tprint(
-`2024–25  Business Analyst Intern — ColoredCow (Agmarknet 2.0)
-2024     Software Developer Intern — District Admin, Tehri Garhwal
-2023     DevRel Lead — HackWithIndia
+`2024–25  Business Analyst Intern, ColoredCow (Agmarknet 2.0)
+2024     Software Developer Intern, District Admin, Tehri Garhwal (LOCAGO)
+2023     Software Developer (part-time), Devnovate
 type <span class="t-amb">open career</span> for details`); },
 
   contact(){ tprint(
 `email ..... <a href="mailto:ahmadtanveer.2905@gmail.com">ahmadtanveer.2905@gmail.com</a>
-phone ..... +91 7017666204
 github .... <a href="https://github.com/Tanveer2905" target="_blank" rel="noopener">github.com/Tanveer2905</a>
 linkedin .. <a href="https://linkedin.com/in/tanveer-ahmad-6a5468251" target="_blank" rel="noopener">/in/tanveer-ahmad-6a5468251</a>`); },
 
   github(){ openWindow('github'); tprint('mounting GITHUB.EXE ...'); },
-  resume(){ window.open('Tanveer_Ahmad_Resume.pdf','_blank'); tprint('fetching Tanveer_Ahmad_Resume.pdf ...'); },
+  resume(){ track('resume'); window.open('Tanveer_Ahmad_Resume.pdf','_blank'); tprint('fetching Tanveer_Ahmad_Resume.pdf ...'); },
 
   open(args){
     const id = (args[0] || '').toLowerCase();
     if(wins[id]){ openWindow(id); tprint(`opening ${esc(TITLES[id])} ...`); }
-    else tprint(`open: unknown app "${esc(args[0] || '')}" — try about, skills, projects, career, github, contact`, 't-err');
+    else tprint(`open: unknown app "${esc(args[0] || '')}". Try about, skills, projects, career, github, contact, or a case name.`, 't-err');
   },
 
   neofetch(){ tprint(
 `<span class="t-amb">      ▄▄▄▄▄▄
      ██ TA ██</span>    tanveer@portfolio
 <span class="t-amb">      ▀▀▀▀▀▀</span>     -----------------
-OS ......... TANVEER-OS v2.0 (CRT build)
-Role ....... AI-focused Software Engineer
-Stack ...... Python · Flask · FastAPI · TensorFlow
-Retrieval .. FAISS + embeddings [loaded]
+OS ......... TANVEER-OS v2.1 (CRT build)
+Role ....... Full-stack &amp; AI Engineer
+Stack ...... Python · FastAPI · React · TensorFlow
+Retrieval .. BGE + FAISS [loaded]
 Uptime ..... coding since 2021 (B.Tech CSE)
-Repos ...... 16 public @ github.com/Tanveer2905`); },
+Repos ...... ${esc(repoCount)} public @ github.com/Tanveer2905`); },
 
   matrix(){ setMatrix(!matrixOn); tprint(`matrix rain: ${matrixOn ? 'ON' : 'OFF'}`); },
   clear(){ T.out.innerHTML = ''; },
@@ -1121,7 +1577,8 @@ Repos ...... 16 public @ github.com/Tanveer2905`); },
 
   sudo(args){
     if(args.join(' ').toLowerCase().includes('hire')){
-      tprint('<span class="t-amb">ACCESS GRANTED — excellent decision.</span> opening MAIL_CLIENT ...');
+      tprint('<span class="t-amb">ACCESS GRANTED. Excellent decision.</span> opening MAIL_CLIENT ...');
+      track('easter/sudo-hire');
       setTimeout(() => openWindow('contact'), 600);
     } else {
       tprint('user is not in the sudoers file. This incident will be reported.', 't-err');
@@ -1137,15 +1594,16 @@ function runCmd(raw){
   if(!line) return;
   T.hist.push(line); T.hi = T.hist.length;
   const [cmd, ...args] = line.split(/\s+/);
-  const fn = CMDS[cmd.toLowerCase()];
-  if(fn) fn(args);
-  else tprint(`command not found: ${esc(cmd)} — type <span class="t-amb">help</span>`, 't-err');
+  const key = cmd.toLowerCase();
+  const fn = Object.prototype.hasOwnProperty.call(CMDS, key) ? CMDS[key] : null;
+  if(fn){ fn(args); track('terminal/' + key); }
+  else tprint(`command not found: ${esc(cmd)}. Type <span class="t-amb">help</span>`, 't-err');
 }
 
 function initTerminal(){
   T.out = $('#term-out');
   T.input = $('#term-input');
-  tprint('TANVEER-OS terminal — type <span class="t-amb">help</span> to begin');
+  tprint('TANVEER-OS terminal. Type <span class="t-amb">help</span> to begin.');
 
   $('#term-form').addEventListener('submit', e => {
     e.preventDefault();
@@ -1172,27 +1630,16 @@ function initTerminal(){
 
 /* -------------------- global wiring -------------------- */
 function init(){
-  /* index windows + drag */
   $$('.window').forEach(w => {
     wins[w.id.replace('window-','')] = w;
     makeDraggable(w);
   });
 
-  /* icon + button openers: dbl-click on desktop, tap on touch, Enter anywhere */
-  const coarse = matchMedia('(pointer: coarse)').matches;
+  /* single click (or Enter/Space, since these are buttons) opens a window */
   $$('[data-open]').forEach(elm => {
-    const id = elm.dataset.open;
-    if(elm.classList.contains('icon') && !coarse){
-      elm.addEventListener('dblclick', () => openWindow(id));
-      elm.addEventListener('keydown', e => {
-        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openWindow(id); }
-      });
-    } else {
-      elm.addEventListener('click', () => openWindow(id));
-    }
+    elm.addEventListener('click', e => { e.stopPropagation(); openWindow(elm.dataset.open); });
   });
 
-  /* close / minimize buttons */
   $$('[data-close]').forEach(b => b.addEventListener('click', e => {
     e.stopPropagation(); closeWindow(b.dataset.close);
   }));
@@ -1200,17 +1647,16 @@ function init(){
     e.stopPropagation(); minimizeWindow(b.dataset.min);
   }));
 
-  /* copy buttons */
   $$('[data-copy]').forEach(b => b.addEventListener('click', () => copyText(b.dataset.copy, b)));
+  $$('[data-track]').forEach(a => a.addEventListener('click', () => track('click/' + a.dataset.track)));
 
-  /* start menu */
   $('#start-btn').addEventListener('click', e => { e.stopPropagation(); toggleStartMenu(); });
   document.addEventListener('click', e => {
     if(startOpen && !e.target.closest('#start-menu') && !e.target.closest('#start-btn')) closeStartMenu();
   });
 
-  /* ESC closes the front-most window */
   document.addEventListener('keydown', e => {
+    if(!bootFinished){ skipBoot(); return; }
     if(e.key !== 'Escape') return;
     if(startOpen){ closeStartMenu(); return; }
     let top = null, tz = -1;
@@ -1221,13 +1667,13 @@ function init(){
     if(top) closeWindow(top);
   });
 
-  /* boot skip triggers */
   $('#boot-screen').addEventListener('click', skipBoot);
-  document.addEventListener('keydown', () => { if(!bootFinished) skipBoot(); }, { once:false });
 
+  initAnalytics();
   initTerminal();
   initMatrix();
   startClock();
+  loadRepoCount();
   runBoot();
 }
 
